@@ -1,0 +1,20 @@
+# twan-nguyen.github.io
+
+Personal portfolio, built with Next.js (static export) and Tailwind CSS, hosted on GitHub Pages at <https://twan-nguyen.github.io>.
+
+## Edit content
+
+All content lives in [`src/data/profile.ts`](src/data/profile.ts). Sections with no data (About, Projects, Experience) stay hidden.
+
+## Develop
+
+```bash
+npm install
+npm run dev
+```
+
+Open <http://localhost:3000>. `npm run build` writes the static site to `out/`.
+
+## Deploy
+
+Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the site and publishes `out/` to GitHub Pages.
