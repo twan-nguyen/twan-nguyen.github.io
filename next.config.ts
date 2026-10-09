@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   basePath: process.env.PAGES_BASE_PATH,
   // The default image loader needs a server, which static export does not have.
   images: { unoptimized: true },
+  // Emit `/vi/index.html` so GitHub Pages serves `/vi/` directly.
+  trailingSlash: true,
   turbopack: {
     rules: {
       "*.css": {
