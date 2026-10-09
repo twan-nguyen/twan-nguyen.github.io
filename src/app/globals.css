@@ -45,8 +45,16 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
+/* Anchor jumps land below the sticky header (two rows on phones, one from md up). */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 104px;
+}
+
+@media (min-width: 48rem) {
+  html {
+    scroll-padding-top: 72px;
+  }
 }
 
 body {

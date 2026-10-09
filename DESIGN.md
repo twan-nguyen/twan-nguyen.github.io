@@ -70,6 +70,7 @@ Contrast: `--faint` on `--panel` is about 6:1 and `--muted` about 8:1. Do not in
 
 - **Primary button:** square corners, `bg-accent border-accent-edge text-white`, min-height 46px. Use one per screen (the hero email).
 - **Secondary button:** transparent, `border-line-strong`, min-height 44–46px.
+- **Header:** pinned (`sticky top-0`) with a translucent `bg-panel/90` and backdrop blur, plus the bottom hairline. From `md` up it is one row: wordmark, nav, language switch. On phones it is two rows: wordmark and language switch on row 1, nav on row 2. `html { scroll-padding-top }` (104px on phones, 72px from `md`) keeps anchor jumps below it. Update both values if the header height changes.
 - **Language switch:** a bordered pair `EN | VI`. The current locale is a non-link with `aria-current`. The other locale is a `Link` with `hrefLang` and `lang`.
 - **Bullets:** a mono `+`, coloured `--accent-edge` for the current role and `--dim` for past roles.
 - **External link:** mono text plus a 13px stroke arrow icon (inline SVG, `aria-hidden`).

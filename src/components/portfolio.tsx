@@ -41,38 +41,39 @@ export function Portfolio({ locale }: { locale: Locale }) {
 
   return (
     <div className="mx-auto max-w-[1200px] border-x border-line bg-panel text-base">
+      {/* Pinned while scrolling. Phones: name + language on row 1, nav on row 2. */}
       <header
-        className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-2.5 border-b border-line px-4 py-3 text-[13px] sm:px-[clamp(16px,3vw,28px)] ${mono}`}
+        className={`sticky top-0 z-20 flex flex-wrap items-center gap-x-6 border-b border-line bg-panel/90 px-4 py-2 text-[13px] backdrop-blur-md sm:px-[clamp(16px,3vw,28px)] md:py-3 ${mono}`}
       >
-        <a href="#top" className="py-1.5 font-serif text-[21px] italic leading-none tracking-[-0.01em] text-ink no-underline">
+        <a href="#top" className="mr-auto py-1.5 font-serif text-[21px] italic leading-none tracking-[-0.01em] text-ink no-underline">
           {c.name}
         </a>
-        <nav aria-label="Primary" className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+        <nav aria-label="Primary" className="order-last -ml-2.5 flex w-full items-center gap-x-1.5 md:order-none md:ml-0 md:w-auto">
           {(["work", "experience", "skills", "contact"] as const).map((key) => (
-            <a key={key} href={`#${key}`} className="px-2.5 py-2.5 text-nav no-underline hover:text-ink">
+            <a key={key} href={`#${key}`} className="px-2.5 py-2 text-nav no-underline hover:text-ink md:py-2.5">
               {c.nav[key]}
             </a>
           ))}
-          <span role="group" aria-label={c.languageLabel} className="ml-2 flex border border-[#2a3340]">
-            {(["en", "vi"] as const).map((l) =>
-              l === locale ? (
-                <span key={l} aria-current="true" className="bg-[#1a212b] px-2.5 py-[7px] text-ink">
-                  {l.toUpperCase()}
-                </span>
-              ) : (
-                <Link
-                  key={l}
-                  href={localePaths[l]}
-                  hrefLang={l}
-                  lang={l}
-                  className="px-2.5 py-[7px] text-faint no-underline hover:text-ink"
-                >
-                  {l.toUpperCase()}
-                </Link>
-              ),
-            )}
-          </span>
         </nav>
+        <span role="group" aria-label={c.languageLabel} className="flex border border-[#2a3340] md:-ml-3">
+          {(["en", "vi"] as const).map((l) =>
+            l === locale ? (
+              <span key={l} aria-current="true" className="bg-[#1a212b] px-2.5 py-[7px] text-ink">
+                {l.toUpperCase()}
+              </span>
+            ) : (
+              <Link
+                key={l}
+                href={localePaths[l]}
+                hrefLang={l}
+                lang={l}
+                className="px-2.5 py-[7px] text-faint no-underline hover:text-ink"
+              >
+                {l.toUpperCase()}
+              </Link>
+            ),
+          )}
+        </span>
       </header>
 
       <main>
@@ -98,7 +99,7 @@ export function Portfolio({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        <section id="work" className="scroll-mt-4 border-t border-line">
+        <section id="work" className="border-t border-line">
           <div className={`pb-8 pt-[clamp(48px,6vw,72px)] ${sectionX}`}>
             <SerifHeading>{c.sections.work}</SerifHeading>
           </div>
@@ -127,7 +128,7 @@ export function Portfolio({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        <section id="experience" className={`scroll-mt-4 pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
+        <section id="experience" className={`pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
           <SerifHeading className="mb-9">{c.sections.experience}</SerifHeading>
           <div className="border border-line">
             <div className="flex flex-wrap justify-between gap-x-6 gap-y-1 border-b border-line bg-panel-2 px-6 py-4">
@@ -158,7 +159,7 @@ export function Portfolio({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        <section id="skills" className={`scroll-mt-4 pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
+        <section id="skills" className={`pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
           <SerifHeading className="mb-9">{c.sections.skills}</SerifHeading>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] border-l border-t border-line">
             {c.skills.map((skill) => (
@@ -193,7 +194,7 @@ export function Portfolio({ locale }: { locale: Locale }) {
 
         <section
           id="contact"
-          className={`mt-[clamp(56px,7vw,88px)] scroll-mt-4 border-t border-line bg-[radial-gradient(520px_220px_at_0%_100%,rgba(47,111,224,0.14),transparent_70%)] py-[clamp(56px,7vw,88px)] ${sectionX}`}
+          className={`mt-[clamp(56px,7vw,88px)] border-t border-line bg-[radial-gradient(520px_220px_at_0%_100%,rgba(47,111,224,0.14),transparent_70%)] py-[clamp(56px,7vw,88px)] ${sectionX}`}
         >
           <SerifHeading className="mb-5">{c.sections.contact}</SerifHeading>
           <a
