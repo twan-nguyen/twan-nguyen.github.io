@@ -1,22 +1,48 @@
 @import "tailwindcss";
 
-/* Palette shared with the PDF CV. The site is intentionally light-only. */
+/* Design tokens — the single source of truth is DESIGN.md. Keep both in sync. */
 :root {
-  --background: #fcfcfa;
-  --foreground: #1b1f24;
-  --muted: #5b6470;
-  --line: #c9d3de;
-  --accent: #1f4e79;
-  color-scheme: light;
+  --bg: #0b0e13; /* page ground, behind the hatch */
+  --panel: #0f1319; /* the ruled content column */
+  --panel-2: #0d1117; /* inset header strips */
+  --line: #222a35; /* every hairline */
+  --line-strong: #2f3a48; /* secondary button borders */
+  --ink: #e6ebf1; /* primary text */
+  --ink-2: #c3ccd7; /* body text, lists */
+  --muted: #a3aebb; /* descriptions */
+  --faint: #8d98a6; /* mono metadata */
+  --nav: #b4bfcc;
+  --dim: #5c6775; /* bullets of past roles */
+  --heading: #b9d1ff; /* serif headings */
+  --link: #9cc0ff;
+  --link-hover: #d6e5ff;
+  --accent: #2f6fe0; /* primary button fill */
+  --accent-edge: #5b8ff0; /* primary button border, current-role bullets */
+  --accent-rule: #3b6fd1; /* email underline */
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
   --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-nav: var(--nav);
+  --color-dim: var(--dim);
+  --color-heading: var(--heading);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
   --color-accent: var(--accent);
+  --color-accent-edge: var(--accent-edge);
+  --color-accent-rule: var(--accent-rule);
+  --font-serif: var(--font-newsreader), Georgia, serif;
   --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 html {
@@ -24,12 +50,39 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg);
+  background-image: repeating-linear-gradient(135deg, rgba(160, 175, 195, 0.045) 0 1px, transparent 1px 10px);
+  color: var(--ink);
   font-family: var(--font-sans);
-  border-top: 4px solid var(--accent);
+  line-height: 1.6;
 }
 
-::selection {
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #6aa1ff;
+  outline-offset: 2px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-rise {
+  animation: rise 0.6s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-rise {
+    animation: none;
+  }
 }

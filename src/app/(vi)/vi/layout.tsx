@@ -1,4 +1,6 @@
-import { buildMetadata, RootShell } from "@/components/root-shell";
+import { buildMetadata, RootShell, viewport } from "@/components/root-shell";
+
+export { viewport };
 
 export const metadata = buildMetadata("vi");
 

@@ -1,48 +1,41 @@
 // All portfolio content lives here, in English and Vietnamese.
+// Each fact appears in exactly one section — see DESIGN.md, "Content rules".
 
 export type Locale = "en" | "vi";
 
-export type Role = {
+export type WorkItem = {
+  meta: string;
   title: string;
-  period: string;
-  intro: string;
-  highlights: string[];
+  body: string;
+  link?: { href: string; label: string };
 };
 
-export type Job = {
-  company: string;
+export type Role = {
   period: string;
-  roles: Role[];
-};
-
-export type Project = {
-  name: string;
-  period: string;
-  url: string;
-  intro: string;
+  title: string;
+  about: string;
+  current: boolean;
+  // Optional lead-in that points to Selected work instead of repeating it.
+  intro?: { before: string; linkText: string; after: string };
   highlights: string[];
 };
 
 export type Content = {
   name: string;
   role: string;
-  location: string;
+  kicker: string;
   summary: string;
-  labels: {
-    about: string;
-    experience: string;
-    projects: string;
-    skills: string;
-    education: string;
-    languages: string;
-    contact: string;
-    switchLanguage: string;
-  };
-  skills: { group: string; items: string[] }[];
-  experience: Job[];
-  projects: Project[];
-  education: { school: string; period: string; degree: string };
-  languages: string[];
+  currently: string;
+  nav: { work: string; experience: string; skills: string; contact: string };
+  sections: { work: string; experience: string; skills: string; education: string; contact: string };
+  emailCta: string;
+  languageLabel: string;
+  work: WorkItem[];
+  company: { name: string; meta: string };
+  roles: Role[];
+  skills: { label: string; items: string; primary: boolean }[];
+  education: { period: string; school: string; degree: string };
+  languages: { label: string; items: string[] };
 };
 
 export const siteUrl = "https://twan-nguyen.github.io";
@@ -55,197 +48,187 @@ export const contacts = {
 
 export const localePaths: Record<Locale, string> = { en: "/", vi: "/vi/" };
 
+const vanXuanLink = { href: "https://thptvanxuan-hoaiduc.edu.vn", label: "thptvanxuan-hoaiduc.edu.vn" };
+
 export const content: Record<Locale, Content> = {
   en: {
     name: "Nguyen Ba Tuan",
     role: "Frontend Developer",
-    location: "Hanoi, Vietnam",
+    kicker: "Frontend Developer · Hanoi, Vietnam",
     summary:
-      "Frontend Developer with 3+ years of experience building B2B SaaS products, with the last 2 years focused on React and TypeScript. Experienced in micro-frontend architecture and developing in-house UI component libraries. Specializes in complex, configurable UIs and data visualization, such as report builders and drag-and-drop dashboards. Background in full-stack development with Vue.js and PHP, enabling close collaboration with backend teams on API design and integration.",
-    labels: {
-      about: "About",
+      "Frontend developer with 3+ years in B2B SaaS, the last two in React and TypeScript. I specialise in complex, configurable interfaces and data visualisation — report builders and drag-and-drop dashboards.",
+    currently: "Currently at Stringee JSC, on the Cogover low-code platform.",
+    nav: { work: "Work", experience: "Experience", skills: "Skills", contact: "Contact" },
+    sections: {
+      work: "Selected work",
       experience: "Experience",
-      projects: "Freelance",
       skills: "Skills",
-      education: "Education",
-      languages: "Languages",
+      education: "Education & languages",
       contact: "Contact",
-      switchLanguage: "Tiếng Việt",
     },
-    skills: [
-      { group: "Languages", items: ["JavaScript", "TypeScript", "HTML", "CSS"] },
+    emailCta: "Email me",
+    languageLabel: "Language",
+    work: [
       {
-        group: "Frontend",
-        items: ["React", "Next.js", "Vue.js", "Redux Toolkit", "TanStack Query", "React Hook Form", "Tailwind CSS", "SCSS"],
+        meta: "Cogover · 2024 — now · module owner",
+        title: "Report Builder & Dashboard",
+        body: "Lets users build reports across multiple data tables — with pivot tables, charts and custom formulas — and arrange them into drag-and-drop dashboards.",
       },
       {
-        group: "Architecture & Practices",
-        items: [
-          "Micro-frontends (Module Federation)",
-          "UI component libraries",
-          "SSR",
-          "SEO",
-          "RESTful APIs",
-          "WebSocket",
-          "i18n",
-          "Responsive Design",
-        ],
+        meta: "Cogover · 2024 — now · micro-frontends",
+        title: "App shell & UI component library",
+        body: "The micro-frontend app shell — routing, permissions, real-time notifications over WebSocket — and the in-house component library (form builder, field components, rich text editor, dark mode), shipped as one npm package every app shares.",
       },
-      { group: "Testing", items: ["Vitest", "Jest"] },
-      { group: "Backend (working knowledge)", items: ["PHP", "MySQL", "MongoDB", "Elasticsearch"] },
       {
-        group: "Tools",
-        items: ["Git", "Docker", "Vite", "Webpack", "Cloudflare", "Jira", "SonarQube", "Claude Code", "Codex"],
+        meta: "Freelance · Jul — Aug 2026 · live",
+        title: "Van Xuan High School website",
+        body: "The school's official site, built and deployed end to end with Next.js, React 19, TypeScript, Tailwind CSS and Cloudflare Workers. Staff publish through Cogover as a headless CMS; the contact form is protected by Cloudflare Turnstile.",
+        link: vanXuanLink,
       },
     ],
-    experience: [
+    company: { name: "Stringee JSC", meta: "Hanoi · Apr 2023 — present" },
+    roles: [
       {
-        company: "Stringee JSC",
-        period: "Apr 2023 – Present",
-        roles: [
-          {
-            title: "Frontend Developer, Cogover",
-            period: "Sep 2024 – Present",
-            intro: "Cogover is a low-code platform that lets companies build their own business management apps.",
-            highlights: [
-              "Own development of the Report Builder & Dashboard module, which lets users build reports across multiple data tables with pivot tables, charts, custom formulas, and drag-and-drop dashboards.",
-              "Develop the app shell and business applications in a micro-frontend architecture, including routing, permissions, and WebSocket-based real-time notifications.",
-              "Maintain and extend the in-house UI component library (form builder, field components, rich text editor, dark mode support), distributed as an npm package shared across all platform apps.",
-              "Build features for Cogover's Next.js websites, including the landing page, developer documentation site, and marketplace.",
-              "Write unit tests with Vitest and keep code passing SonarQube Quality Gates.",
-              "Maintain a knowledge base documenting the platform for AI coding agents (Claude Code, Codex) to use during development.",
-            ],
-          },
-          {
-            title: "Full-stack Developer, StringeeX",
-            period: "Apr 2023 – Aug 2024",
-            intro: "StringeeX is an omnichannel contact center and CRM platform (calls, chat, email, tickets).",
-            highlights: [
-              "Developed web application features with Vue.js: call reports, ticketing, email channel, per-customer portal configuration, and payment integration.",
-              "Built REST APIs in PHP for the call center system: automated call campaigns, hotline management, and webhooks.",
-              "Migrated the reporting service's data source from Solr to Elasticsearch.",
-              "Added developer portal features: phone number management, device management, and account permissions.",
-              "Wrote unit tests with Jest and PHPUnit.",
-            ],
-          },
-        ],
-      },
-    ],
-    projects: [
-      {
-        name: "Van Xuan High School Website (Hoai Duc, Hanoi)",
-        period: "Jul 2026 – Aug 2026",
-        url: "https://thptvanxuan-hoaiduc.edu.vn",
-        intro: "Official school website, currently live.",
+        period: "Sep 2024 — present",
+        title: "Frontend Developer, Cogover",
+        about: "A low-code platform for building business management apps.",
+        current: true,
+        intro: { before: "Report Builder, app shell and component library — see ", linkText: "Selected work", after: ". Also:" },
         highlights: [
-          "Handled end-to-end development and deployment using Next.js (App Router), React 19, TypeScript, Tailwind CSS, and Cloudflare Workers.",
-          "Integrated Cogover as a headless CMS, allowing school staff to update news, announcements, categories, and images without code changes.",
-          "Built a contact form with Cloudflare Turnstile spam protection and server-side verification, storing submissions in Cogover.",
-          "Optimized SEO, image delivery, and SSR performance, with a fully responsive layout across screen sizes.",
+          "Features for Cogover's Next.js landing page, developer docs and marketplace.",
+          "Unit tests with Vitest; code held to SonarQube Quality Gates.",
+          "A platform knowledge base for AI coding agents (Claude Code, Codex).",
         ],
+      },
+      {
+        period: "Apr 2023 — Aug 2024",
+        title: "Full-stack Developer, StringeeX",
+        about: "An omnichannel contact center and CRM: calls, chat, email, tickets.",
+        current: false,
+        highlights: [
+          "Vue.js features: call reports, ticketing, email channel, per-customer portal configuration, payment integration.",
+          "PHP REST APIs for the call center: automated call campaigns, hotline management, webhooks.",
+          "Migrated the reporting service's data source from Solr to Elasticsearch.",
+          "Developer portal: phone numbers, devices, account permissions.",
+          "Unit tests with Jest and PHPUnit.",
+        ],
+      },
+    ],
+    skills: [
+      {
+        label: "frontend",
+        items: "React, Next.js, Vue.js, Redux Toolkit, TanStack Query, React Hook Form, Tailwind CSS, SCSS",
+        primary: true,
+      },
+      {
+        label: "architecture & practices",
+        items:
+          "Micro-frontends (Module Federation), UI component libraries, SSR, SEO, RESTful APIs, WebSocket, i18n, responsive design",
+        primary: true,
+      },
+      { label: "languages · testing", items: "JavaScript, TypeScript, HTML, CSS · Vitest, Jest", primary: true },
+      { label: "backend · working knowledge", items: "PHP, MySQL, MongoDB, Elasticsearch", primary: false },
+      {
+        label: "tools",
+        items: "Git, Docker, Vite, Webpack, Cloudflare, Jira, SonarQube, Claude Code, Codex",
+        primary: false,
       },
     ],
     education: {
+      period: "2020 — 2024",
       school: "University of Transport and Communications",
-      period: "2020 – 2024",
       degree: "Engineer's Degree in Information Technology · GPA 3.27/4.0 (Very Good)",
     },
-    languages: ["Vietnamese: Native", "English: Upper-intermediate (B2)"],
+    languages: { label: "languages", items: ["Vietnamese — native", "English — upper-intermediate (B2)"] },
   },
   vi: {
     name: "Nguyễn Bá Tuấn",
     role: "Frontend Developer",
-    location: "Hà Nội",
+    kicker: "Frontend Developer · Hà Nội",
     summary:
-      "Frontend Developer với hơn 3 năm kinh nghiệm phát triển sản phẩm SaaS B2B, trong đó 2 năm gần đây chuyên về React và TypeScript. Có kinh nghiệm làm việc với kiến trúc micro-frontend và phát triển thư viện UI component nội bộ. Thế mạnh là các giao diện cấu hình phức tạp và trực quan hoá dữ liệu, như công cụ tạo báo cáo (report builder) và dashboard kéo thả. Từng làm fullstack với Vue.js và PHP, nên chủ động phối hợp với backend khi thiết kế và tích hợp API.",
-    labels: {
-      about: "Giới thiệu",
+      "Frontend Developer với hơn 3 năm kinh nghiệm phát triển sản phẩm SaaS B2B, trong đó 2 năm gần đây chuyên về React và TypeScript. Thế mạnh là các giao diện cấu hình phức tạp và trực quan hoá dữ liệu — công cụ tạo báo cáo (report builder) và dashboard kéo thả.",
+    currently: "Hiện làm tại Stringee JSC, trên nền tảng low-code Cogover.",
+    nav: { work: "Dự án", experience: "Kinh nghiệm", skills: "Kỹ năng", contact: "Liên hệ" },
+    sections: {
+      work: "Dự án tiêu biểu",
       experience: "Kinh nghiệm",
-      projects: "Freelance",
       skills: "Kỹ năng",
-      education: "Học vấn",
-      languages: "Ngoại ngữ",
+      education: "Học vấn & ngoại ngữ",
       contact: "Liên hệ",
-      switchLanguage: "English",
     },
-    skills: [
-      { group: "Ngôn ngữ", items: ["JavaScript", "TypeScript", "HTML", "CSS"] },
+    emailCta: "Gửi email",
+    languageLabel: "Ngôn ngữ",
+    work: [
       {
-        group: "Frontend",
-        items: ["React", "Next.js", "Vue.js", "Redux Toolkit", "TanStack Query", "React Hook Form", "Tailwind CSS", "SCSS"],
+        meta: "Cogover · 2024 — nay · phụ trách chính",
+        title: "Report Builder & Dashboard",
+        body: "Công cụ để người dùng tự tạo báo cáo từ nhiều bảng dữ liệu — có bảng pivot, biểu đồ và công thức tính toán — rồi sắp xếp thành dashboard kéo thả.",
       },
       {
-        group: "Kỹ thuật",
-        items: [
-          "Micro-frontend (Module Federation)",
-          "UI component library",
-          "SSR",
-          "SEO",
-          "RESTful API",
-          "WebSocket",
-          "i18n",
-          "Responsive Design",
-        ],
+        meta: "Cogover · 2024 — nay · micro-frontend",
+        title: "App shell & thư viện UI component",
+        body: "App shell theo kiến trúc micro-frontend — routing, phân quyền, thông báo realtime qua WebSocket — cùng thư viện UI component nội bộ (form builder, các loại field, rich text editor, dark mode), đóng gói thành npm package dùng chung cho mọi ứng dụng.",
       },
-      { group: "Testing", items: ["Vitest", "Jest"] },
-      { group: "Backend (cơ bản)", items: ["PHP", "MySQL", "MongoDB", "Elasticsearch"] },
       {
-        group: "Công cụ",
-        items: ["Git", "Docker", "Vite", "Webpack", "Cloudflare", "Jira", "SonarQube", "Claude Code", "Codex"],
+        meta: "Freelance · 07 — 08/2026 · đang hoạt động",
+        title: "Website THPT Vạn Xuân – Hoài Đức",
+        body: "Website chính thức của trường, tự phát triển và triển khai toàn bộ bằng Next.js, React 19, TypeScript, Tailwind CSS và Cloudflare Workers. Nhà trường tự đăng bài qua Cogover (headless CMS); form liên hệ được chống spam bằng Cloudflare Turnstile.",
+        link: vanXuanLink,
       },
     ],
-    experience: [
+    company: { name: "Stringee JSC", meta: "Hà Nội · 04/2023 — nay" },
+    roles: [
       {
-        company: "Stringee JSC",
-        period: "04/2023 – nay",
-        roles: [
-          {
-            title: "Frontend Developer, sản phẩm Cogover",
-            period: "09/2024 – nay",
-            intro: "Cogover là nền tảng low-code để doanh nghiệp tự xây dựng ứng dụng quản trị.",
-            highlights: [
-              "Phụ trách chính module Report Builder & Dashboard: công cụ để người dùng tự tạo báo cáo từ nhiều bảng dữ liệu, có bảng pivot, biểu đồ, công thức tính toán và dashboard kéo thả.",
-              "Phát triển app shell và các ứng dụng nghiệp vụ theo kiến trúc micro-frontend, gồm routing, phân quyền và thông báo realtime qua WebSocket.",
-              "Bảo trì và mở rộng thư viện UI component nội bộ (form builder, các loại field, rich text editor, dark mode), đóng gói thành npm package dùng chung cho mọi ứng dụng của nền tảng.",
-              "Xây dựng tính năng cho các website Next.js của sản phẩm: landing page, trang tài liệu cho developer và marketplace.",
-              "Viết unit test bằng Vitest và giữ code đạt chuẩn SonarQube Quality Gate.",
-              "Xây dựng knowledge base mô tả hệ thống để dùng cùng AI coding agent (Claude Code, Codex) trong quá trình phát triển.",
-            ],
-          },
-          {
-            title: "Fullstack Developer, sản phẩm StringeeX",
-            period: "04/2023 – 08/2024",
-            intro: "StringeeX là nền tảng contact center và CRM đa kênh (cuộc gọi, chat, email, ticket).",
-            highlights: [
-              "Phát triển ứng dụng web bằng Vue.js: báo cáo cuộc gọi, ticket, kênh email, cấu hình portal riêng cho từng khách hàng và tích hợp thanh toán.",
-              "Xây dựng REST API bằng PHP cho hệ thống tổng đài: chiến dịch gọi tự động, quản lý hotline, webhook.",
-              "Chuyển nguồn dữ liệu của dịch vụ báo cáo từ Solr sang Elasticsearch.",
-              "Bổ sung tính năng cho developer portal: quản lý số điện thoại, thiết bị và phân quyền tài khoản.",
-              "Viết unit test bằng Jest và PHPUnit.",
-            ],
-          },
-        ],
-      },
-    ],
-    projects: [
-      {
-        name: "Website THPT Vạn Xuân – Hoài Đức",
-        period: "07/2026 – 08/2026",
-        url: "https://thptvanxuan-hoaiduc.edu.vn",
-        intro: "Website chính thức của trường, hiện đang hoạt động.",
+        period: "09/2024 — nay",
+        title: "Frontend Developer, sản phẩm Cogover",
+        about: "Nền tảng low-code để doanh nghiệp tự xây dựng ứng dụng quản trị.",
+        current: true,
+        intro: { before: "Report Builder, app shell và thư viện component — xem ", linkText: "Dự án tiêu biểu", after: ". Ngoài ra:" },
         highlights: [
-          "Đảm nhận toàn bộ việc phát triển và triển khai, dùng Next.js (App Router), React 19, TypeScript, Tailwind CSS và Cloudflare Workers.",
-          "Dùng Cogover làm headless CMS, để nhà trường tự cập nhật tin tức, thông báo, danh mục và hình ảnh mà không cần sửa code.",
-          "Xây dựng form liên hệ chống spam bằng Cloudflare Turnstile, xác minh phía server rồi lưu yêu cầu về Cogover.",
-          "Tối ưu SEO, hình ảnh và hiệu năng SSR. Giao diện hiển thị tốt trên mọi kích thước màn hình.",
+          "Xây dựng tính năng cho các website Next.js của Cogover: landing page, trang tài liệu cho developer và marketplace.",
+          "Viết unit test bằng Vitest, giữ code đạt chuẩn SonarQube Quality Gate.",
+          "Xây dựng knowledge base mô tả hệ thống cho AI coding agent (Claude Code, Codex).",
         ],
+      },
+      {
+        period: "04/2023 — 08/2024",
+        title: "Fullstack Developer, sản phẩm StringeeX",
+        about: "Nền tảng contact center và CRM đa kênh: cuộc gọi, chat, email, ticket.",
+        current: false,
+        highlights: [
+          "Phát triển ứng dụng web bằng Vue.js: báo cáo cuộc gọi, ticket, kênh email, cấu hình portal riêng cho từng khách hàng và tích hợp thanh toán.",
+          "Xây dựng REST API bằng PHP cho hệ thống tổng đài: chiến dịch gọi tự động, quản lý hotline, webhook.",
+          "Chuyển nguồn dữ liệu của dịch vụ báo cáo từ Solr sang Elasticsearch.",
+          "Bổ sung tính năng cho developer portal: quản lý số điện thoại, thiết bị và phân quyền tài khoản.",
+          "Viết unit test bằng Jest và PHPUnit.",
+        ],
+      },
+    ],
+    skills: [
+      {
+        label: "frontend",
+        items: "React, Next.js, Vue.js, Redux Toolkit, TanStack Query, React Hook Form, Tailwind CSS, SCSS",
+        primary: true,
+      },
+      {
+        label: "kiến trúc & kỹ thuật",
+        items:
+          "Micro-frontend (Module Federation), UI component library, SSR, SEO, RESTful API, WebSocket, i18n, Responsive Design",
+        primary: true,
+      },
+      { label: "ngôn ngữ · testing", items: "JavaScript, TypeScript, HTML, CSS · Vitest, Jest", primary: true },
+      { label: "backend · cơ bản", items: "PHP, MySQL, MongoDB, Elasticsearch", primary: false },
+      {
+        label: "công cụ",
+        items: "Git, Docker, Vite, Webpack, Cloudflare, Jira, SonarQube, Claude Code, Codex",
+        primary: false,
       },
     ],
     education: {
+      period: "2020 — 2024",
       school: "Trường Đại học Giao thông Vận tải",
-      period: "2020 – 2024",
       degree: "Kỹ sư Công nghệ thông tin · Tốt nghiệp loại Giỏi · GPA 3.27/4.0",
     },
-    languages: ["Tiếng Anh: B2"],
+    languages: { label: "ngoại ngữ", items: ["Tiếng Việt — bản ngữ", "Tiếng Anh — B2"] },
   },
 };

@@ -1,147 +1,225 @@
 import Link from "next/link";
 import { contacts, content, localePaths, type Locale } from "@/data/profile";
 
-function Section({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+// Layout and styling follow DESIGN.md ("Ink & serif"). Read it before changing this file.
+
+const sectionX = "px-4 sm:px-[clamp(16px,5vw,64px)]";
+const mono = "font-mono";
+const btnPrimary =
+  "inline-flex min-h-[46px] items-center border border-accent-edge bg-accent px-5 font-medium text-white no-underline transition-colors hover:bg-[#3a7aee]";
+const btnSecondary =
+  "inline-flex min-h-[46px] items-center border border-line-strong px-[18px] font-medium text-ink no-underline transition-colors hover:border-faint";
+
+function SerifHeading({ id, children, className = "" }: { id?: string; children: React.ReactNode; className?: string }) {
   return (
-    <section id={id} className="grid gap-4 border-t border-line pt-8 md:grid-cols-[10rem_1fr] md:gap-8">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-accent md:pt-1">{label}</h2>
-      <div>{children}</div>
-    </section>
+    <h2
+      id={id}
+      className={`m-0 font-serif text-[clamp(36px,4.4vw,56px)] font-normal italic leading-[1.05] text-heading ${className}`}
+    >
+      {children}
+    </h2>
   );
 }
 
-function Highlights({ items }: { items: string[] }) {
+function Bullets({ items, current }: { items: string[]; current: boolean }) {
   return (
-    <ul className="mt-3 flex flex-col gap-2">
+    <ul className="m-0 flex list-none flex-col gap-2 p-0">
       {items.map((item) => (
-        <li key={item} className="relative pl-5 leading-relaxed before:absolute before:left-0 before:text-muted before:content-['–']">
-          {item}
+        <li key={item} className="flex gap-3">
+          <span aria-hidden="true" className={`${mono} ${current ? "text-accent-edge" : "text-dim"}`}>
+            +
+          </span>
+          <span>{item}</span>
         </li>
       ))}
     </ul>
   );
 }
 
-const linkClass = "underline decoration-line underline-offset-4 transition-colors hover:text-accent hover:decoration-accent";
-
 export function Portfolio({ locale }: { locale: Locale }) {
   const c = content[locale];
-  const otherLocale: Locale = locale === "en" ? "vi" : "en";
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 sm:px-8">
-      <header className="flex justify-end py-6 text-sm">
-        <Link href={localePaths[otherLocale]} hrefLang={otherLocale} lang={otherLocale} className={linkClass}>
-          {c.labels.switchLanguage}
-        </Link>
+    <div className="mx-auto max-w-[1200px] border-x border-line bg-panel text-base">
+      <header
+        className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-2.5 border-b border-line px-4 py-3 text-[13px] sm:px-[clamp(16px,3vw,28px)] ${mono}`}
+      >
+        <a href="#top" className="py-1.5 font-serif text-[21px] italic leading-none tracking-[-0.01em] text-ink no-underline">
+          {c.name}
+        </a>
+        <nav aria-label="Primary" className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+          {(["work", "experience", "skills", "contact"] as const).map((key) => (
+            <a key={key} href={`#${key}`} className="px-2.5 py-2.5 text-nav no-underline hover:text-ink">
+              {c.nav[key]}
+            </a>
+          ))}
+          <span role="group" aria-label={c.languageLabel} className="ml-2 flex border border-[#2a3340]">
+            {(["en", "vi"] as const).map((l) =>
+              l === locale ? (
+                <span key={l} aria-current="true" className="bg-[#1a212b] px-2.5 py-[7px] text-ink">
+                  {l.toUpperCase()}
+                </span>
+              ) : (
+                <Link
+                  key={l}
+                  href={localePaths[l]}
+                  hrefLang={l}
+                  lang={l}
+                  className="px-2.5 py-[7px] text-faint no-underline hover:text-ink"
+                >
+                  {l.toUpperCase()}
+                </Link>
+              ),
+            )}
+          </span>
+        </nav>
       </header>
 
-      <main className="flex flex-col gap-14 pb-20">
-        <section className="pt-10 sm:pt-16">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">{c.name}</h1>
-          <p className="mt-4 text-lg sm:text-xl">
-            <span className="font-medium text-accent">{c.role}</span>
-            <span className="text-muted"> · {c.location}</span>
+      <main>
+        <section id="top" className={`animate-rise pb-[clamp(48px,6vw,64px)] pt-[clamp(64px,9vw,112px)] ${sectionX}`}>
+          <p className={`m-0 mb-[22px] text-[13px] text-faint ${mono}`}>{c.kicker}</p>
+          <h1 className="m-0 font-serif text-[clamp(56px,8.6vw,120px)] font-normal italic leading-[0.95] tracking-[-0.02em] text-heading">
+            {c.name}
+          </h1>
+          <p className="m-0 mt-7 max-w-[680px] text-[clamp(18px,1.7vw,21px)] leading-[1.6] text-ink-2 [text-wrap:pretty]">
+            {c.summary}
           </p>
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
-            <li>
-              <a href={`mailto:${contacts.email}`} className={linkClass}>
-                {contacts.email}
-              </a>
-            </li>
-            <li>
-              <a href={contacts.linkedin} target="_blank" rel="noreferrer" className={linkClass}>
-                LinkedIn
-              </a>
-            </li>
-            <li>
-              <a href={contacts.github} target="_blank" rel="noreferrer" className={linkClass}>
-                GitHub
-              </a>
-            </li>
-          </ul>
+          <p className={`m-0 mt-4 text-[13px] text-faint ${mono}`}>{c.currently}</p>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <a href={`mailto:${contacts.email}`} className={btnPrimary}>
+              {c.emailCta}
+            </a>
+            <a href={contacts.github} className={btnSecondary}>
+              GitHub
+            </a>
+            <a href={contacts.linkedin} className={btnSecondary}>
+              LinkedIn
+            </a>
+          </div>
         </section>
 
-        <Section id="about" label={c.labels.about}>
-          <p className="max-w-prose text-lg leading-relaxed">{c.summary}</p>
-        </Section>
-
-        <Section id="experience" label={c.labels.experience}>
-          {c.experience.map((job) => (
-            <div key={job.company}>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                <h3 className="text-xl font-semibold">{job.company}</h3>
-                <span className="text-sm text-muted">{job.period}</span>
-              </div>
-              <ol className="mt-6 flex flex-col gap-10 border-l-2 border-accent/25 pl-5 sm:pl-6">
-                {job.roles.map((role) => (
-                  <li key={role.title}>
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                      <h4 className="font-semibold">{role.title}</h4>
-                      <span className="text-sm text-muted">{role.period}</span>
-                    </div>
-                    <p className="mt-1 italic text-muted">{role.intro}</p>
-                    <Highlights items={role.highlights} />
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ))}
-        </Section>
-
-        <Section id="projects" label={c.labels.projects}>
-          <div className="flex flex-col gap-10">
-            {c.projects.map((project) => (
-              <article key={project.name}>
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                  <h3 className="text-xl font-semibold">{project.name}</h3>
-                  <span className="text-sm text-muted">{project.period}</span>
-                </div>
-                <p className="mt-1 text-muted">
-                  <a href={project.url} target="_blank" rel="noreferrer" className={linkClass}>
-                    {project.url.replace(/^https?:\/\//, "")}
+        <section id="work" className="scroll-mt-4 border-t border-line">
+          <div className={`pb-8 pt-[clamp(48px,6vw,72px)] ${sectionX}`}>
+            <SerifHeading>{c.sections.work}</SerifHeading>
+          </div>
+          <div className="grid border-t border-line lg:grid-cols-3">
+            {c.work.map((item) => (
+              <article
+                key={item.title}
+                className="flex flex-col gap-3.5 border-b border-line p-[clamp(20px,3vw,32px)] lg:border-r lg:last:border-r-0"
+              >
+                <p className={`m-0 text-xs text-faint ${mono}`}>{item.meta}</p>
+                <h3 className="m-0 text-xl font-semibold">{item.title}</h3>
+                <p className="m-0 text-[15px] text-muted [text-wrap:pretty]">{item.body}</p>
+                {item.link && (
+                  <a
+                    href={item.link.href}
+                    className={`mt-auto inline-flex min-h-11 items-center gap-2 self-start text-[13px] text-link hover:text-link-hover ${mono}`}
+                  >
+                    {item.link.label}
+                    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                      <path d="M4 10L10 4M5 4h5v5" />
+                    </svg>
                   </a>
-                  <span className="italic"> — {project.intro}</span>
-                </p>
-                <Highlights items={project.highlights} />
+                )}
               </article>
             ))}
           </div>
-        </Section>
+        </section>
 
-        <Section id="skills" label={c.labels.skills}>
-          <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[13rem_1fr]">
+        <section id="experience" className={`scroll-mt-4 pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
+          <SerifHeading className="mb-9">{c.sections.experience}</SerifHeading>
+          <div className="border border-line">
+            <div className="flex flex-wrap justify-between gap-x-6 gap-y-1 border-b border-line bg-panel-2 px-6 py-4">
+              <h3 className="m-0 text-[17px] font-semibold">{c.company.name}</h3>
+              <span className={`pt-[3px] text-xs text-faint ${mono}`}>{c.company.meta}</span>
+            </div>
+            {c.roles.map((role) => (
+              <article key={role.title} className="flex flex-wrap border-b border-line last:border-b-0">
+                <div className="grow basis-[260px] border-b border-line p-6 md:border-b-0 md:border-r">
+                  <p className={`m-0 text-xs ${role.current ? "text-link" : "text-faint"} ${mono}`}>{role.period}</p>
+                  <h4 className="m-0 mb-0.5 mt-2 text-[17px] font-semibold">{role.title}</h4>
+                  <p className="m-0 text-sm text-muted">{role.about}</p>
+                </div>
+                <div className="grow-[2.4] basis-[460px] p-6 text-[15px] text-ink-2">
+                  {role.intro && (
+                    <p className="m-0 mb-3">
+                      {role.intro.before}
+                      <a href="#work" className="text-link hover:text-link-hover">
+                        {role.intro.linkText}
+                      </a>
+                      {role.intro.after}
+                    </p>
+                  )}
+                  <Bullets items={role.highlights} current={role.current} />
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="skills" className={`scroll-mt-4 pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
+          <SerifHeading className="mb-9">{c.sections.skills}</SerifHeading>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] border-l border-t border-line">
             {c.skills.map((skill) => (
-              <div key={skill.group} className="contents">
-                <dt className="font-medium">{skill.group}</dt>
-                <dd className="mb-2 leading-relaxed text-muted sm:mb-0">{skill.items.join(", ")}</dd>
+              <div key={skill.label} className="border-b border-r border-line px-[22px] py-5">
+                <p className={`m-0 mb-2 text-xs ${skill.primary ? "text-link" : "text-faint"} ${mono}`}>{skill.label}</p>
+                <p className={`m-0 text-[15px] ${skill.primary ? "text-ink" : "text-ink-2"}`}>{skill.items}</p>
               </div>
             ))}
-          </dl>
-        </Section>
-
-        <Section id="education" label={c.labels.education}>
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-            <h3 className="font-semibold">{c.education.school}</h3>
-            <span className="text-sm text-muted">{c.education.period}</span>
           </div>
-          <p className="mt-1 text-muted">{c.education.degree}</p>
-        </Section>
+        </section>
 
-        <Section id="languages" label={c.labels.languages}>
-          <ul className="flex flex-col gap-1">
-            {c.languages.map((language) => (
-              <li key={language}>{language}</li>
-            ))}
-          </ul>
-        </Section>
+        <section aria-labelledby="education-title" className={`pt-[clamp(56px,7vw,88px)] ${sectionX}`}>
+          <SerifHeading id="education-title" className="mb-9">
+            {c.sections.education}
+          </SerifHeading>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] border-l border-t border-line">
+            <div className="border-b border-r border-line px-[22px] py-5">
+              <p className={`m-0 mb-1.5 text-xs text-faint ${mono}`}>{c.education.period}</p>
+              <p className="m-0 font-semibold">{c.education.school}</p>
+              <p className="m-0 mt-1 text-[15px] text-muted">{c.education.degree}</p>
+            </div>
+            <div className="border-b border-r border-line px-[22px] py-5">
+              <p className={`m-0 mb-1.5 text-xs text-faint ${mono}`}>{c.languages.label}</p>
+              {c.languages.items.map((language) => (
+                <p key={language} className="m-0 font-semibold">
+                  {language}
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="contact"
+          className={`mt-[clamp(56px,7vw,88px)] scroll-mt-4 border-t border-line bg-[radial-gradient(520px_220px_at_0%_100%,rgba(47,111,224,0.14),transparent_70%)] py-[clamp(56px,7vw,88px)] ${sectionX}`}
+        >
+          <SerifHeading className="mb-5">{c.sections.contact}</SerifHeading>
+          <a
+            href={`mailto:${contacts.email}`}
+            className="inline-block break-words text-[clamp(24px,3.4vw,40px)] font-medium tracking-[-0.02em] text-ink underline decoration-accent-rule underline-offset-[0.18em] hover:text-link-hover"
+          >
+            {contacts.email}
+          </a>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a href={contacts.linkedin} className={`${btnSecondary} min-h-11`}>
+              LinkedIn
+            </a>
+            <a href={contacts.github} className={`${btnSecondary} min-h-11`}>
+              GitHub
+            </a>
+          </div>
+        </section>
       </main>
 
-      <footer className="flex flex-wrap justify-between gap-4 border-t border-line py-8 text-sm text-muted">
-        <span>© {c.name}</span>
-        <a href={`mailto:${contacts.email}`} className={linkClass}>
-          {contacts.email}
-        </a>
+      <footer
+        className={`flex flex-wrap justify-between gap-3 border-t border-line px-4 py-[18px] text-xs text-faint sm:px-[clamp(16px,3vw,28px)] ${mono}`}
+      >
+        <span>
+          © {new Date().getFullYear()} {c.name}
+        </span>
+        <span>Next.js · GitHub Pages</span>
       </footer>
     </div>
   );
