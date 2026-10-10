@@ -30,6 +30,8 @@ export type Content = {
   sections: { work: string; experience: string; skills: string; education: string; contact: string };
   emailCta: string;
   languageLabel: string;
+  /** Footer credit for the visual inspiration; the link text is always "zed.dev". */
+  inspiredBy: string;
   work: WorkItem[];
   company: { name: string; meta: string };
   roles: Role[];
@@ -68,6 +70,7 @@ export const content: Record<Locale, Content> = {
     },
     emailCta: "Email me",
     languageLabel: "Language",
+    inspiredBy: "Design inspired by",
     work: [
       {
         meta: "Cogover · 2024 — now · module owner",
@@ -158,6 +161,7 @@ export const content: Record<Locale, Content> = {
     },
     emailCta: "Gửi email",
     languageLabel: "Ngôn ngữ",
+    inspiredBy: "Thiết kế lấy cảm hứng từ",
     work: [
       {
         meta: "Cogover · 2024 — nay · phụ trách chính",

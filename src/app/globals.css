@@ -5,6 +5,7 @@
   --bg: #0b0e13; /* page ground, behind the hatch */
   --panel: #0f1319; /* the ruled content column */
   --panel-2: #0d1117; /* inset header strips */
+  --panel-hover: #121821; /* hovered grid cells */
   --line: #222a35; /* every hairline */
   --line-strong: #2f3a48; /* secondary button borders */
   --ink: #e6ebf1; /* primary text */
@@ -13,12 +14,16 @@
   --faint: #8d98a6; /* mono metadata */
   --nav: #b4bfcc;
   --dim: #5c6775; /* bullets of past roles */
-  --heading: #b9d1ff; /* serif headings */
-  --link: #9cc0ff;
-  --link-hover: #d6e5ff;
-  --accent: #2f6fe0; /* primary button fill */
-  --accent-edge: #5b8ff0; /* primary button border, current-role bullets */
-  --accent-rule: #3b6fd1; /* email underline */
+  --heading: #f5d39b; /* serif headings, pale amber */
+  --link: #f0b867;
+  --link-hover: #ffe2b0;
+  --accent: #d9863a; /* primary button fill */
+  --accent-hover: #e59a52;
+  --on-accent: #1b1207; /* text on the accent fill (white fails contrast) */
+  --accent-edge: #f0a860; /* primary button border, current-role bullets */
+  --accent-rule: #c9762a; /* email underline */
+  --focus: #ffc46b; /* focus ring */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); /* every motion curve */
   color-scheme: dark;
 }
 
@@ -26,6 +31,7 @@
   --color-bg: var(--bg);
   --color-panel: var(--panel);
   --color-panel-2: var(--panel-2);
+  --color-panel-hover: var(--panel-hover);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-ink: var(--ink);
@@ -38,11 +44,18 @@
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
   --color-accent-edge: var(--accent-edge);
   --color-accent-rule: var(--accent-rule);
   --font-serif: var(--font-newsreader), Georgia, serif;
   --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* Wide enough for gutters beside the 1200px column: enables the `frame:` variant. */
+@theme {
+  --breakpoint-frame: 83rem;
 }
 
 /* Anchor jumps land below the sticky header (two rows on phones, one from md up). */
@@ -67,30 +80,96 @@ body {
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid #6aa1ff;
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
+/* Outer gutter edges are dashed like a ruler; the column edges stay solid. */
+.gutter-l,
+.gutter-r {
+  background: repeating-linear-gradient(to bottom, var(--line-strong) 0 4px, transparent 4px 8px) no-repeat;
+  background-size: 1px 100%;
+}
+.gutter-l {
+  background-position: left top;
+}
+.gutter-r {
+  background-position: right top;
+}
+
+/* Hero background: 24px grid in pale amber. */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(245, 211, 155, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 211, 155, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Motion — see DESIGN.md §5. Everything below is switched off under reduced motion. */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
+    transform: translateY(14px);
   }
 }
 
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes turn {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Hero load-in, staggered with `[--i:n]`. */
 .animate-rise {
-  animation: rise 0.6s ease-out both;
+  animation: rise 0.9s var(--ease-out-expo) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+.caret {
+  animation: blink 1.1s steps(1) infinite;
+}
+
+/* Hero diamonds: `transform` holds each layer's resting angle (--a) and `rotate` turns it,
+   so the two compose. Duration and direction are set per layer in the component. */
+.spin-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(var(--a, 0deg));
+  opacity: 0.16;
+  animation: turn 90s linear infinite;
+}
+
+/* Fade blocks in as they scroll into view; browsers without scroll timelines show them as is. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal linear both;
+    animation-timeline: view();
+    /* A fixed distance, so tall blocks on phones are not left half-faded. */
+    animation-range: entry 0px entry 200px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .animate-rise {
+  .animate-rise,
+  .caret,
+  .spin-layer,
+  .reveal {
     animation: none;
   }
 }
