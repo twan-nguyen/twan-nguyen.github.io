@@ -28,6 +28,8 @@ export const viewport: Viewport = { themeColor: "#0b0e13" };
 export function buildMetadata(locale: Locale): Metadata {
   const { name, role, summary } = content[locale];
   const title = `${name} — ${role}`;
+  // Rendered by scripts/og/render-og.sh; regenerate after changing the name, kicker or palette.
+  const image = { url: `/og-${locale}.png`, width: 1200, height: 630, alt: title };
 
   return {
     metadataBase: new URL(siteUrl),
@@ -44,7 +46,9 @@ export function buildMetadata(locale: Locale): Metadata {
       description: summary,
       siteName: name,
       locale: locale === "en" ? "en_US" : "vi_VN",
+      images: [image],
     },
+    twitter: { card: "summary_large_image", title, description: summary, images: [image] },
   };
 }
 

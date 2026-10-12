@@ -1,0 +1,50 @@
+<!doctype html>
+<!--
+  Open Graph card, 1200×630. Rendered to public/og-{locale}.png by render-og.sh.
+  A plain centred card: panel colour, kicker, name, URL. Colours follow DESIGN.md; text mirrors
+  src/data/profile.ts — keep both in sync.
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@1,6..72,400&family=JetBrains+Mono:wght@400&subset=vietnamese&display=block"
+  rel="stylesheet"
+/>
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    background: #0f1319;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+  .kicker { font-size: 24px; color: #8d98a6; }
+  h1 {
+    margin-top: 20px;
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 400;
+    /* Sized so the name fits the centre 630px square that some apps crop to. */
+    font-size: 90px; line-height: 1; letter-spacing: -0.02em; color: #f5d39b;
+  }
+  .url { position: absolute; left: 0; right: 0; bottom: 56px; font-size: 22px; color: #f0b867; }
+</style>
+</head>
+<body>
+  <p class="kicker" id="kicker"></p>
+  <h1 id="name"></h1>
+  <p class="url">twan-nguyen.github.io</p>
+  <script>
+    const copy = {
+      en: { name: "Nguyen Ba Tuan", kicker: "Frontend Developer · Hanoi, Vietnam" },
+      vi: { name: "Nguyễn Bá Tuấn", kicker: "Frontend Developer · Hà Nội" },
+    };
+    const locale = new URLSearchParams(location.search).get("locale") === "vi" ? "vi" : "en";
+    document.documentElement.lang = locale;
+    document.getElementById("name").textContent = copy[locale].name;
+    document.getElementById("kicker").textContent = copy[locale].kicker;
+  </script>
+</body>
+</html>

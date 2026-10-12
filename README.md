@@ -6,6 +6,12 @@ Personal portfolio, built with Next.js (static export) and Tailwind CSS, hosted 
 
 All content lives in [`src/data/profile.ts`](src/data/profile.ts), with an English version served at `/` and a Vietnamese version at `/vi/`. Each language has its own root layout under `src/app/(en)` and `src/app/(vi)` so the page gets the right `<html lang>`.
 
+The link-preview images (`public/og-en.png`, `public/og-vi.png`) are rendered from [`scripts/og/og-template.html`](scripts/og/og-template.html) with headless Chrome. After changing the name, kicker or palette, update the copy in that template and run:
+
+```bash
+bash scripts/og/render-og.sh
+```
+
 ## Design
 
 Visual and content rules live in [`DESIGN.md`](DESIGN.md). Read it before changing the layout, colours, fonts or copy.
