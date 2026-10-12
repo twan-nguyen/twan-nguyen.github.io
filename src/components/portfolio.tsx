@@ -1,26 +1,41 @@
 import Link from "next/link";
 import { contacts, content, localePaths, type Locale } from "@/data/profile";
+import {
+  ArrowUpRightIcon,
+  BriefcaseIcon,
+  CalendarIcon,
+  GitHubIcon,
+  GlobeIcon,
+  GraduationIcon,
+  LinkedInIcon,
+  MailIcon,
+} from "@/components/icons";
 
 // Layout and styling follow DESIGN.md ("Ink & serif"). Read it before changing this file.
 
 const sectionX = "px-4 sm:px-[clamp(16px,5vw,64px)]";
 const mono = "font-mono";
 const press = "transition-[background-color,border-color,box-shadow,transform] duration-150 active:translate-y-px";
-const btnPrimary = `inline-flex min-h-[46px] items-center border border-accent-edge bg-accent px-5 font-medium text-on-accent no-underline shadow-[inset_0_-2px_0_0_rgba(60,28,0,0.35)] hover:bg-accent-hover hover:shadow-none ${press}`;
-const btnSecondary = `inline-flex min-h-[46px] items-center border border-line-strong px-[18px] font-medium text-ink no-underline hover:border-faint ${press}`;
+const btnPrimary = `inline-flex min-h-[46px] items-center gap-2.5 border border-accent-edge bg-accent px-5 font-medium text-on-accent no-underline shadow-[inset_0_-2px_0_0_rgba(60,28,0,0.35)] hover:bg-accent-hover hover:shadow-none ${press}`;
+const btnSecondary = `inline-flex min-h-[46px] items-center gap-2.5 border border-line-strong px-[18px] font-medium text-ink no-underline hover:border-faint ${press}`;
 
-/** Overlapping diamonds, each a little smaller, offset in angle and turning at its own pace. */
-const diamonds = Array.from({ length: 7 }, (_, i) => ({
-  r: 500 * (1 - i * 0.11),
-  angle: i * 13,
-  seconds: 70 + i * 16,
-  reverse: i % 2 === 1,
-}));
+/** Contacts on the radar: angle clockwise from 12 o'clock, distance from the centre (SVG units). */
+const blips = [
+  { angle: 38, r: 300 },
+  { angle: 152, r: 210 },
+  { angle: 247, r: 370 },
+  { angle: 318, r: 150 },
+];
+
+/** Circumference-based dash pattern that draws `count` radial ticks on a circle of radius `r`. */
+function ticks(r: number, count: number, width: number) {
+  return `${width} ${(2 * Math.PI * r) / count - width}`;
+}
 
 /**
- * The hero background: a fine grid behind overlapping diamonds (the frame's node
- * motif) that slowly turn against each other around the hero's centre. Kept faint;
- * decorative only.
+ * The hero background, centred on the hero and kept faint: a fine engineering grid
+ * and a still radar scope (range rings, ruler ticks, dashed crosshair). A beam sweeps
+ * the grid, and small diamond contacts flare as it passes them. Decorative only.
  */
 function HeroBackdrop() {
   return (
@@ -28,30 +43,44 @@ function HeroBackdrop() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 overflow-hidden opacity-60 [mask-image:radial-gradient(ellipse_at_center,#000_25%,transparent_75%)] md:opacity-100"
     >
-      {/* 2400 = 100 grid cells, so grid lines cross exactly at the centre. */}
+      {/* 2400 = 40 major cells, so a major grid line crosses exactly at the centre. */}
       <div className="hero-grid absolute left-1/2 top-1/2 size-[2400px] -translate-x-1/2 -translate-y-1/2" />
+      {/* The beam turns underneath a grid-shaped mask, so only the grid lines light up. */}
+      <div className="hero-grid-mask absolute left-1/2 top-1/2 size-[2400px] -translate-x-1/2 -translate-y-1/2">
+        <div className="hero-sweep absolute inset-0" />
+      </div>
+      <div className="hero-core absolute left-1/2 top-1/2 size-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full" />
       <svg
         viewBox="-500 -500 1000 1000"
         fill="none"
         stroke="currentColor"
+        strokeWidth="1"
         className="absolute left-1/2 top-1/2 aspect-square h-[130%] -translate-x-1/2 -translate-y-1/2 text-heading"
       >
-        {diamonds.map(({ r, angle, seconds, reverse }) => (
-          <path
-            key={r}
-            className="spin-layer"
-            d={`M0 ${-r} ${r} 0 0 ${r} ${-r} 0Z`}
-            vectorEffect="non-scaling-stroke"
-            style={
-              {
-                "--a": `${angle}deg`,
-                animationDuration: `${seconds}s`,
-                animationDirection: reverse ? "reverse" : "normal",
-              } as React.CSSProperties
-            }
-          />
-        ))}
-        <path d="M0-6 6 0 0 6-6 0Z" className="opacity-30" />
+        <g opacity="0.14">
+          {[120, 240, 360].map((r) => (
+            <circle key={r} r={r} />
+          ))}
+          <circle r="470" strokeDasharray="4 4" />
+          <path d="M-480 0h960M0-480v960" strokeDasharray="4 4" />
+        </g>
+        <circle r="482" strokeWidth="10" strokeDasharray={ticks(482, 72, 1)} opacity="0.16" />
+        <circle r="480" strokeWidth="16" strokeDasharray={ticks(480, 12, 1.5)} opacity="0.22" />
+        {blips.map(({ angle, r }) => {
+          const rad = (angle * Math.PI) / 180;
+          const [x, y] = [r * Math.sin(rad), -r * Math.cos(rad)];
+          return (
+            <path
+              key={angle}
+              className="blip"
+              d={`M${x} ${y - 7} ${x + 7} ${y} ${x} ${y + 7} ${x - 7} ${y}Z`}
+              fill="currentColor"
+              stroke="none"
+              style={{ "--turn": angle / 360 } as React.CSSProperties}
+            />
+          );
+        })}
+        <path d="M0-6 6 0 0 6-6 0Z" opacity="0.4" />
       </svg>
     </div>
   );
@@ -196,13 +225,16 @@ export function Portfolio({ locale }: { locale: Locale }) {
               <span aria-hidden="true" className="caret ml-1.5 inline-block h-[1.1em] w-[0.55em] translate-y-[0.2em] bg-accent-edge" />
             </p>
             <div className="animate-rise mt-9 flex flex-wrap items-center gap-3 [--i:4]">
-              <a href={`mailto:${contacts.email}`} className={btnPrimary}>
+              <a href={`mailto:${contacts.email}`} className={`${btnPrimary} max-sm:w-full max-sm:justify-center`}>
+                <MailIcon />
                 {c.emailCta}
               </a>
-              <a href={contacts.github} className={btnSecondary}>
+              <a href={contacts.github} className={`${btnSecondary} max-sm:flex-1 max-sm:justify-center`}>
+                <GitHubIcon />
                 GitHub
               </a>
-              <a href={contacts.linkedin} className={btnSecondary}>
+              <a href={contacts.linkedin} className={`${btnSecondary} max-sm:flex-1 max-sm:justify-center`}>
+                <LinkedInIcon />
                 LinkedIn
               </a>
             </div>
@@ -229,18 +261,10 @@ export function Portfolio({ locale }: { locale: Locale }) {
                       className={`group mt-auto inline-flex min-h-11 items-center gap-2 self-start text-[13px] text-link hover:text-link-hover ${mono}`}
                     >
                       {item.link.label}
-                      <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        aria-hidden="true"
+                      <ArrowUpRightIcon
+                        size={13}
                         className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      >
-                        <path d="M4 10L10 4M5 4h5v5" />
-                      </svg>
+                      />
                     </a>
                   )}
                 </div>
@@ -253,13 +277,19 @@ export function Portfolio({ locale }: { locale: Locale }) {
           <SerifHeading className="reveal mb-9">{c.sections.experience}</SerifHeading>
           <div className="reveal border border-line">
             <div className="flex flex-wrap justify-between gap-x-6 gap-y-1 border-b border-line bg-panel-2 px-6 py-4">
-              <h3 className="m-0 text-[17px] font-semibold">{c.company.name}</h3>
+              <h3 className="m-0 flex items-center gap-2.5 text-[17px] font-semibold">
+                <BriefcaseIcon size={17} className="text-faint" />
+                {c.company.name}
+              </h3>
               <span className={`pt-[3px] text-xs text-faint ${mono}`}>{c.company.meta}</span>
             </div>
             {c.roles.map((role) => (
               <article key={role.title} className="flex flex-wrap border-b border-line last:border-b-0">
                 <div className="grow basis-[260px] border-b border-line p-6 md:border-b-0 md:border-r">
-                  <p className={`m-0 text-xs ${role.current ? "text-link" : "text-faint"} ${mono}`}>{role.period}</p>
+                  <p className={`m-0 flex items-center gap-2 text-xs ${role.current ? "text-link" : "text-faint"} ${mono}`}>
+                    <CalendarIcon size={13} />
+                    {role.period}
+                  </p>
                   <h4 className="m-0 mb-0.5 mt-2 text-[17px] font-semibold">{role.title}</h4>
                   <p className="m-0 text-sm text-muted">{role.about}</p>
                 </div>
@@ -298,12 +328,18 @@ export function Portfolio({ locale }: { locale: Locale }) {
           </SerifHeading>
           <div className="reveal grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] border-l border-t border-line">
             <div className="border-b border-r border-line px-[22px] py-5">
-              <p className={`m-0 mb-1.5 text-xs text-faint ${mono}`}>{c.education.period}</p>
+              <p className={`m-0 mb-1.5 flex items-center gap-2 text-xs text-faint ${mono}`}>
+                <GraduationIcon size={14} />
+                {c.education.period}
+              </p>
               <p className="m-0 font-semibold">{c.education.school}</p>
               <p className="m-0 mt-1 text-[15px] text-muted">{c.education.degree}</p>
             </div>
             <div className="border-b border-r border-line px-[22px] py-5">
-              <p className={`m-0 mb-1.5 text-xs text-faint ${mono}`}>{c.languages.label}</p>
+              <p className={`m-0 mb-1.5 flex items-center gap-2 text-xs text-faint ${mono}`}>
+                <GlobeIcon size={14} />
+                {c.languages.label}
+              </p>
               {c.languages.items.map((language) => (
                 <p key={language} className="m-0 font-semibold">
                   {language}
@@ -328,9 +364,11 @@ export function Portfolio({ locale }: { locale: Locale }) {
             </a>
             <div className="mt-7 flex flex-wrap gap-3">
               <a href={contacts.linkedin} className={`${btnSecondary} min-h-11`}>
+                <LinkedInIcon />
                 LinkedIn
               </a>
               <a href={contacts.github} className={`${btnSecondary} min-h-11`}>
+                <GitHubIcon />
                 GitHub
               </a>
             </div>

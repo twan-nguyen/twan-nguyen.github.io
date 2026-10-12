@@ -24,6 +24,7 @@
   --accent-rule: #c9762a; /* email underline */
   --focus: #ffc46b; /* focus ring */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); /* every motion curve */
+  --sweep: 12s; /* one turn of the hero radar beam; contacts flare in step with it */
   color-scheme: dark;
 }
 
@@ -97,12 +98,47 @@ button:focus-visible {
   background-position: right top;
 }
 
-/* Hero background: 24px grid in pale amber. */
+/* Hero background: engineering grid in pale amber, 12px cells with a stronger line every 60px. */
 .hero-grid {
   background-image:
-    linear-gradient(to right, rgba(245, 211, 155, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(245, 211, 155, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
+    linear-gradient(to right, rgba(245, 211, 155, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 211, 155, 0.08) 1px, transparent 1px),
+    linear-gradient(to right, rgba(245, 211, 155, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 211, 155, 0.035) 1px, transparent 1px);
+  background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
+}
+
+/* Same lines as the grid, used as a mask so the sweep below lights only the lines. */
+.hero-grid-mask {
+  -webkit-mask-image:
+    linear-gradient(to right, #000 1px, transparent 1px),
+    linear-gradient(to bottom, #000 1px, transparent 1px);
+  mask-image:
+    linear-gradient(to right, #000 1px, transparent 1px),
+    linear-gradient(to bottom, #000 1px, transparent 1px);
+  -webkit-mask-size: 12px 12px;
+  mask-size: 12px 12px;
+}
+
+/* A radar beam: leading edge at 12 o'clock, long fading tail; turns clockwise. Kept dim so
+   it never outshines the text. */
+.hero-sweep {
+  background: conic-gradient(from 0deg, transparent 0deg 250deg, rgba(240, 184, 103, 0.04) 330deg, rgba(255, 220, 160, 0.16) 360deg);
+  animation: turn var(--sweep) linear infinite;
+}
+
+/* A contact flares as the beam's leading edge reaches its angle (--turn, 0 to 1), then fades.
+   The negative delay puts the flare at that point of every turn. */
+.blip {
+  opacity: 0;
+  animation: blip var(--sweep) linear infinite;
+  animation-delay: calc((var(--turn, 0) - 1) * var(--sweep));
+}
+
+/* Soft amber light at the centre of the radar. */
+.hero-core {
+  background: radial-gradient(circle, rgba(240, 184, 103, 0.14), transparent 65%);
+  animation: glow 7s ease-in-out infinite;
 }
 
 /* Motion — see DESIGN.md §5. Everything below is switched off under reduced motion. */
@@ -126,6 +162,23 @@ button:focus-visible {
   }
 }
 
+@keyframes blip {
+  0% {
+    opacity: 0.85;
+  }
+  35%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+  50% {
+    opacity: 0.55;
+    scale: 0.9;
+  }
+}
+
 @keyframes blink {
   50% {
     opacity: 0;
@@ -140,16 +193,6 @@ button:focus-visible {
 
 .caret {
   animation: blink 1.1s steps(1) infinite;
-}
-
-/* Hero diamonds: `transform` holds each layer's resting angle (--a) and `rotate` turns it,
-   so the two compose. Duration and direction are set per layer in the component. */
-.spin-layer {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: rotate(var(--a, 0deg));
-  opacity: 0.16;
-  animation: turn 90s linear infinite;
 }
 
 /* Fade blocks in as they scroll into view; browsers without scroll timelines show them as is. */
@@ -168,8 +211,14 @@ button:focus-visible {
   }
   .animate-rise,
   .caret,
-  .spin-layer,
+  .hero-sweep,
+  .hero-core,
   .reveal {
     animation: none;
+  }
+  /* Without the sweep, contacts sit at a steady, dim level. */
+  .blip {
+    animation: none;
+    opacity: 0.3;
   }
 }

@@ -81,23 +81,35 @@ Contrast: `--faint` on `--panel` is about 6:1 and `--muted` about 8:1. Do not in
 
 - **Primary button:** square corners, `bg-accent border-accent-edge text-on-accent`, `hover:bg-accent-hover`, min-height 46px, a 2px darker inset edge at the bottom that drops on hover. Use one per screen (the hero email).
 - **Secondary button:** transparent, `border-line-strong`, min-height 44–46px.
-- Both buttons sink 1px while pressed (`active:translate-y-px`).
+- Both buttons sink 1px while pressed (`active:translate-y-px`). Each carries a 16px icon left of its label (`gap-2.5`).
+- **Hero buttons on phones** (below `sm`): Email fills the first row, GitHub and LinkedIn share the second row equally. Never let one button wrap alone.
+- **Icons** live in `src/components/icons.tsx`: inline SVG in `currentColor`, `aria-hidden` (a visible label always sits beside them). Stroke icons are 24-unit, 1.6 stroke, round caps; brand marks (GitHub, LinkedIn) are filled Simple Icons paths (CC0). Where they appear, and nowhere else:
+  - buttons: mail, GitHub, LinkedIn (16px);
+  - experience: a briefcase before the company name (17px, `--faint`) and a calendar before each role's dates (13px);
+  - education & languages: a graduation cap before the study years and a globe before the languages label (14px);
+  - external links: the up-right arrow (13px).
+  Do not put icons on skill labels, nav links or headings, and do not turn them into chips.
 - **Header:** a `Row` pinned with `sticky top-0`. The band is `bg-bg/80`, the cell `bg-panel/90`, both under backdrop blur, with the bottom hairline and nodes. From `md` up it is one row: wordmark, nav, language switch. On phones it is two rows: wordmark and language switch on row 1, nav on row 2. `html { scroll-padding-top }` (104px on phones, 72px from `md`) keeps anchor jumps below it. Update both values if the header height changes.
 - **Language switch:** a bordered pair `EN | VI`. The current locale is a non-link with `aria-current`. The other locale is a `Link` with `hrefLang` and `lang`.
 - **Bullets:** a mono `+`, coloured `--accent-edge` for the current role and `--dim` for past roles.
-- **External link:** mono text plus a 13px stroke arrow icon (inline SVG, `aria-hidden`). The arrow nudges up and right on hover.
+- **External link:** mono text plus the 13px `ArrowUpRightIcon`. The arrow nudges up and right on hover.
 - **Work and skill cells** take `--panel-hover` on hover (300ms colour transition).
 - **Contact:** the email set large (`clamp(24px, 3.4vw, 40px)`) with an underline in `--accent-rule`, then secondary buttons.
-- **Hero background** (`HeroBackdrop` in `portfolio.tsx`), behind the hero text, `aria-hidden`, no pointer events. Centred exactly on the hero, never offset:
-  - a fine **grid** of 24px cells (`.hero-grid`, pale amber at 5%). The grid box is 2400px (100 cells), so grid lines cross exactly at the centre;
-  - seven **overlapping diamonds** (the node motif), each 11% smaller than the last and offset 13° from it. They turn slowly against each other (alternate layers reverse), each at its own pace (70s to 166s a turn), so their crossings keep shifting. There is a small fixed diamond at the centre. Strokes stay 1px (`non-scaling-stroke`), `--heading` at 16%.
-  - The whole layer fades out radially from the centre and stays faint: it sets a mood and never competes with the text. On phones it drops to 60% opacity.
+- **Hero background** (`HeroBackdrop` in `portfolio.tsx`): a radar, centred exactly on the hero, `aria-hidden`, no pointer events.
+  - an **engineering grid** (`.hero-grid`): 12px cells in pale amber at 3.5%, with a stronger line (8%) every 60px. The grid box is 2400px (40 major cells), so a major line crosses exactly at the centre;
+  - a still **scope** in `--heading`: three range rings, a dashed outer ring and a dashed crosshair (14%), and a ruler-tick ring (72 minor, 12 major ticks). It does not move;
+  - the **sweep**: a dim conic beam (`.hero-sweep`, peak 16%, long fading tail) that turns clockwise once per `--sweep` (12s) underneath a grid-shaped mask (`.hero-grid-mask`), so it lights only the grid lines as it passes;
+  - four **contacts**: small filled diamonds (the frame's motif) that flare as the beam's leading edge reaches them, then fade;
+  - a soft amber **core** at the centre (`.hero-core`, 14%) and a small fixed diamond at the very centre.
+  - The whole layer fades out radially from the centre and must never compete with the text: the beam was dimmed for exactly that reason, so dim rather than brighten. On phones the layer drops to 60% opacity.
+  - A stack of turning, breathing diamonds was tried here and **removed**: it fought the radar for attention.
   - Do not add text, logos or data to it.
-- **Gradients:** only three, all amber and faint: the radial glow at the bottom left of Contact, a bottom-up wash in the hero (6%), and the hatch. Add no others.
+- **Link-preview card** (`public/og-{locale}.png`, 1200×630): deliberately plain and centred, with the name sized to fit the centre 630px square that some apps crop to: `--panel` ground, kicker in mono `--faint`, name in Newsreader italic `--heading`, URL in `--link`. No frame, grid or diamonds. Its template (`scripts/og/og-template.html`) repeats the colours and copy, so update it with any palette or name change and re-render.
+- **Gradients:** all amber and faint, and only these: the radial glow at the bottom left of Contact, a bottom-up wash in the hero (6%), the hatch, and the hero radar's own sweep and core. Add no others.
 - **Motion** (all in `globals.css`, all switched off under `prefers-reduced-motion`). Add no other animation without updating this list:
   1. `animate-rise`: hero children fade up 14px over 0.9s on `--ease-out-expo`, staggered 90ms by `[--i:n]` (kicker, name, summary, currently, buttons).
-  2. `spin-layer`: each hero diamond turns once per its own duration, linear, around its centre. Its resting angle lives in `transform` (`--a`) and the animation turns `rotate`, so the two compose. With reduced motion they stand still at their resting angles.
-  3. `caret`: a blinking block caret (`--accent-edge`) at the end of the hero's *currently* line. Together with the hero diamonds it is one of only two looping animations; it is not a terminal and gets no prompt or typed text.
+  2. Hero radar: `hero-sweep` turns the beam once per `--sweep` (12s, linear). Each `blip` flares and fades over the same period; its negative delay, `(--turn − 1) × --sweep` with `--turn` = angle ÷ 360, keeps it in step with the beam. `hero-core` swells and dims every 7s. With reduced motion the beam and core stand still and contacts sit at a steady 30%.
+  3. `caret`: a blinking block caret (`--accent-edge`) at the end of the hero's *currently* line. Apart from the hero backdrop it is the only looping animation; it is not a terminal and gets no prompt or typed text.
   4. `reveal`: headings and blocks below the fold fade up 18px as they scroll in, driven by `animation-timeline: view()` over a fixed 200px (so tall blocks on phones are not left half-faded). Browsers without scroll timelines show them unanimated. Never put `reveal` on an element whose borders touch the column edges; put it on the content inside the cell instead.
   5. Micro-interactions: button press, cell hover, arrow nudge, nav colour transitions.
 
