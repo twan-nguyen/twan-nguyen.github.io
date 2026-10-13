@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Fragment } from "react";
 import Link from "next/link";
 import { contacts, content, localePaths, type Locale } from "@/data/profile";
 import {
@@ -10,6 +11,7 @@ import {
   LinkedInIcon,
   MailIcon,
 } from "@/components/icons";
+import { HeroContours } from "@/components/hero-contours";
 
 // Layout and styling follow DESIGN.md ("Ink & serif"). Read it before changing this file.
 
@@ -19,71 +21,22 @@ const press = "transition-[background-color,border-color,box-shadow,transform] d
 const btnPrimary = `inline-flex min-h-[46px] items-center gap-2.5 border border-accent-edge bg-accent px-5 font-medium text-on-accent no-underline shadow-[inset_0_-2px_0_0_rgba(60,28,0,0.35)] hover:bg-accent-hover hover:shadow-none ${press}`;
 const btnSecondary = `inline-flex min-h-[46px] items-center gap-2.5 border border-line-strong px-[18px] font-medium text-ink no-underline hover:border-faint ${press}`;
 
-/** Contacts on the radar: angle clockwise from 12 o'clock, distance from the centre (SVG units). */
-const blips = [
-  { angle: 38, r: 300 },
-  { angle: 152, r: 210 },
-  { angle: 247, r: 370 },
-  { angle: 318, r: 150 },
-];
-
-/** Circumference-based dash pattern that draws `count` radial ticks on a circle of radius `r`. */
-function ticks(r: number, count: number, width: number) {
-  return `${width} ${(2 * Math.PI * r) / count - width}`;
-}
-
 /**
- * The hero background, centred on the hero and kept faint: a fine engineering grid
- * and a still radar scope (range rings, ruler ticks, dashed crosshair). A beam sweeps
- * the grid, and small diamond contacts flare as it passes them. Decorative only.
+ * The hero background: a living contour map over the whole hero (see HeroContours). On wide
+ * screens it fades out towards the left, where the text sits. Decorative only.
  */
 function HeroBackdrop() {
   return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden opacity-60 [mask-image:radial-gradient(ellipse_at_center,#000_25%,transparent_75%)] md:opacity-100"
-    >
-      {/* 2400 = 40 major cells, so a major grid line crosses exactly at the centre. */}
-      <div className="hero-grid absolute left-1/2 top-1/2 size-[2400px] -translate-x-1/2 -translate-y-1/2" />
-      {/* The beam turns underneath a grid-shaped mask, so only the grid lines light up. */}
-      <div className="hero-grid-mask absolute left-1/2 top-1/2 size-[2400px] -translate-x-1/2 -translate-y-1/2">
-        <div className="hero-sweep absolute inset-0" />
-      </div>
-      <div className="hero-core absolute left-1/2 top-1/2 size-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full" />
-      <svg
-        viewBox="-500 -500 1000 1000"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-        className="absolute left-1/2 top-1/2 aspect-square h-[130%] -translate-x-1/2 -translate-y-1/2 text-heading"
-      >
-        <g opacity="0.14">
-          {[120, 240, 360].map((r) => (
-            <circle key={r} r={r} />
-          ))}
-          <circle r="470" strokeDasharray="4 4" />
-          <path d="M-480 0h960M0-480v960" strokeDasharray="4 4" />
-        </g>
-        <circle r="482" strokeWidth="10" strokeDasharray={ticks(482, 72, 1)} opacity="0.16" />
-        <circle r="480" strokeWidth="16" strokeDasharray={ticks(480, 12, 1.5)} opacity="0.22" />
-        {blips.map(({ angle, r }) => {
-          const rad = (angle * Math.PI) / 180;
-          const [x, y] = [r * Math.sin(rad), -r * Math.cos(rad)];
-          return (
-            <path
-              key={angle}
-              className="blip"
-              d={`M${x} ${y - 7} ${x + 7} ${y} ${x} ${y + 7} ${x - 7} ${y}Z`}
-              fill="currentColor"
-              stroke="none"
-              style={{ "--turn": angle / 360 } as React.CSSProperties}
-            />
-          );
-        })}
-        <path d="M0-6 6 0 0 6-6 0Z" opacity="0.4" />
-      </svg>
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden opacity-60 md:opacity-100">
+      <HeroContours className="absolute inset-0 size-full lg:[mask-image:linear-gradient(to_right,rgba(0,0,0,0.35)_15%,#000_65%)]" />
     </div>
   );
+}
+
+/** Splits a name into words and letters, numbering the letters across the whole name for the stagger. */
+function nameWords(name: string) {
+  let index = 0;
+  return name.split(" ").map((word) => ({ word, chars: Array.from(word, (char) => ({ char, index: index++ })) }));
 }
 
 /** A registration mark (+) where a row's hairline crosses a vertical line, drawn brighter than the lines. */
@@ -209,13 +162,29 @@ export function Portfolio({ locale }: { locale: Locale }) {
         <Row
           id="top"
           surface="bg-panel bg-[linear-gradient(to_top,rgba(217,134,58,0.06),transparent_55%)]"
-          cellClassName={`pb-[clamp(48px,6vw,64px)] pt-[clamp(64px,9vw,112px)] ${sectionX}`}
+          cellClassName={`flex flex-col justify-center pb-[clamp(48px,6vw,64px)] pt-[clamp(64px,9vw,112px)] md:min-h-[min(860px,calc(100svh-58px))] ${sectionX}`}
         >
           <HeroBackdrop />
           <div className="relative">
             <p className={`animate-rise m-0 mb-[22px] text-[13px] text-faint ${mono}`}>{c.kicker}</p>
-            <h1 className="animate-rise m-0 font-serif text-[clamp(56px,8.6vw,120px)] font-normal italic leading-[0.95] tracking-[-0.02em] text-heading [--i:1]">
-              {c.name}
+            <h1 className="m-0 font-serif text-[clamp(56px,11vw,148px)] font-normal italic leading-[0.95] tracking-[-0.025em] text-heading">
+              {/* Each letter rises out from behind its word's baseline; the padding keeps italic overhangs and Vietnamese tone marks inside the clip. */}
+              <span className="sr-only">{c.name}</span>
+              {/* The letters are split only for the motion, so screen readers get the name above instead. */}
+              <span aria-hidden="true">
+                {nameWords(c.name).map(({ word, chars }, i) => (
+                  <Fragment key={word}>
+                    {i > 0 && " "}
+                    <span className="-mx-[0.08em] -mt-[0.15em] inline-block overflow-hidden px-[0.08em] pb-[0.1em] pt-[0.15em] align-bottom">
+                      {chars.map(({ char, index }) => (
+                        <span key={index} className="name-char" style={{ "--c": index } as React.CSSProperties}>
+                          {char}
+                        </span>
+                      ))}
+                    </span>
+                  </Fragment>
+                ))}
+              </span>
             </h1>
             <p className="animate-rise m-0 mt-7 max-w-[680px] text-[clamp(18px,1.7vw,21px)] leading-[1.6] text-ink-2 [--i:2] [text-wrap:pretty]">
               {c.summary}
