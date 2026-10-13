@@ -58,7 +58,7 @@ export const content: Record<Locale, Content> = {
     role: "Frontend Developer",
     kicker: "Frontend Developer · Hanoi, Vietnam",
     summary:
-      "Frontend developer with 3+ years in B2B SaaS, the last two in React and TypeScript. I specialise in complex, configurable interfaces and data visualisation — report builders and drag-and-drop dashboards.",
+      "Frontend developer with 3+ years in B2B SaaS, working in React and TypeScript.",
     currently: "Currently at Stringee JSC, working on Cogover, a low-code platform.",
     nav: { work: "Work", experience: "Experience", skills: "Skills", contact: "Contact" },
     sections: {
@@ -140,16 +140,16 @@ export const content: Record<Locale, Content> = {
     education: {
       period: "2020 — 2024",
       school: "University of Transport and Communications",
-      degree: "Engineer's Degree in Information Technology · GPA 3.27/4.0 (Very Good)",
+      degree: "Engineer's Degree in Information Technology · GPA 3.27/4.0",
     },
-    languages: { label: "languages", items: ["Vietnamese — native", "English — upper-intermediate (B2)"] },
+    languages: { label: "languages", items: ["Vietnamese — native", "English — B1"] },
   },
   vi: {
     name: "Nguyễn Bá Tuấn",
     role: "Frontend Developer",
     kicker: "Frontend Developer · Hà Nội",
     summary:
-      "Frontend Developer với hơn 3 năm kinh nghiệm phát triển sản phẩm SaaS B2B, trong đó 2 năm gần đây chuyên về React và TypeScript. Thế mạnh là các giao diện cấu hình phức tạp và trực quan hoá dữ liệu — công cụ tạo báo cáo (report builder) và dashboard kéo thả.",
+      "Frontend Developer với hơn 3 năm làm sản phẩm SaaS B2B, chuyên về React và TypeScript.",
     currently: "Hiện làm tại Stringee JSC, trên nền tảng low-code Cogover.",
     nav: { work: "Dự án", experience: "Kinh nghiệm", skills: "Kỹ năng", contact: "Liên hệ" },
     sections: {
@@ -233,6 +233,6 @@ export const content: Record<Locale, Content> = {
       school: "Trường Đại học Giao thông Vận tải",
       degree: "Kỹ sư Công nghệ thông tin · Tốt nghiệp loại Giỏi · GPA 3.27/4.0",
     },
-    languages: { label: "ngoại ngữ", items: ["Tiếng Việt — bản ngữ", "Tiếng Anh — B2"] },
+    languages: { label: "ngoại ngữ", items: ["Tiếng Việt — bản ngữ", "Tiếng Anh — B1"] },
   },
 };
