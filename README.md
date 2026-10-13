@@ -1,30 +1,13 @@
-# twan-nguyen.github.io
+[![Nguyen Ba Tuan, Frontend Developer](public/og-en.png)](https://twan-nguyen.github.io)
 
-Personal portfolio, built with Next.js (static export) and Tailwind CSS, hosted on GitHub Pages at <https://twan-nguyen.github.io>.
+Source code for my personal portfolio: **<https://twan-nguyen.github.io>**
 
-## Edit content
+I'm Nguyen Ba Tuan, a frontend developer based in Hanoi. The site is available in English and [Vietnamese](https://twan-nguyen.github.io/vi/).
 
-All content lives in [`src/data/profile.ts`](src/data/profile.ts), with an English version served at `/` and a Vietnamese version at `/vi/`. Each language has its own root layout under `src/app/(en)` and `src/app/(vi)` so the page gets the right `<html lang>`.
+Built with Next.js, React, TypeScript and Tailwind CSS, and hosted on GitHub Pages. The design is inspired by [zed.dev](https://zed.dev).
 
-The link-preview images (`public/og-en.png`, `public/og-vi.png`) are rendered from [`scripts/og/og-template.html`](scripts/og/og-template.html) with headless Chrome. After changing the name, kicker or palette, update the copy in that template and run:
+## License
 
-```bash
-bash scripts/og/render-og.sh
-```
+The code is released under the [MIT License](LICENSE).
 
-## Design
-
-Visual and content rules live in [`DESIGN.md`](DESIGN.md). Read it before changing the layout, colours, fonts or copy.
-
-## Develop
-
-```bash
-npm install
-npm run dev
-```
-
-Open <http://localhost:3000>. `npm run build` writes the static site to `out/`.
-
-## Deploy
-
-Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the site and publishes `out/` to GitHub Pages.
+The personal content is not covered by that license: my name, CV details and work descriptions in [`src/data/profile.ts`](src/data/profile.ts), and the images in [`public/`](public/). All rights to them are reserved. If you fork this repository, please replace them with your own.
