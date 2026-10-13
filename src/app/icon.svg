@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- A 3×3 pivot table whose header row and middle column light up as a T.
+       Every value is a multiple of 4 so the cells land on whole pixels at 16, 32 and 48px. -->
+  <rect width="64" height="64" rx="12" fill="#0f1319"/>
+  <g fill="#2a3340">
+    <rect x="4" y="24" width="16" height="16" rx="2"/>
+    <rect x="44" y="24" width="16" height="16" rx="2"/>
+    <rect x="4" y="44" width="16" height="16" rx="2"/>
+    <rect x="44" y="44" width="16" height="16" rx="2"/>
+  </g>
+  <g fill="#f5d39b">
+    <rect x="4" y="4" width="16" height="16" rx="2"/>
+    <rect x="24" y="4" width="16" height="16" rx="2"/>
+    <rect x="44" y="4" width="16" height="16" rx="2"/>
+    <rect x="24" y="24" width="16" height="16" rx="2"/>
+    <rect x="24" y="44" width="16" height="16" rx="2"/>
+  </g>
+</svg>

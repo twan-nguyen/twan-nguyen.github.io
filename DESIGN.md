@@ -105,6 +105,7 @@ Contrast: `--faint` on `--panel` is about 6:1 and `--muted` about 8:1. Do not in
   - A stack of turning, breathing diamonds was tried here and **removed**: it fought the radar for attention.
   - Do not add text, logos or data to it.
 - **Link-preview card** (`public/og-{locale}.png`, 1200×630): deliberately plain and centred, with the name sized to fit the centre 630px square that some apps crop to: `--panel` ground, kicker in mono `--faint`, name in Newsreader italic `--heading`, URL in `--link`. No frame, grid or diamonds. Its template (`scripts/og/og-template.html`) repeats the colours and copy, so update it with any palette, name or kicker change and re-render with `bash scripts/og/render-og.sh` (needs Google Chrome; set `CHROME` to use another binary).
+- **Favicon** (`src/app/icon.svg`, `favicon.ico`, `apple-icon.png`): a 3×3 pivot table whose header row and middle column light up pale amber as a **T**, on a `--panel` tile; the other cells are `#2a3340`. Every coordinate is a multiple of 4 on a 64 grid, so cells land on whole pixels at 16, 32 and 48px. The 180px Apple icon (`scripts/icons/apple-icon.svg`) adds the story the tab icon has no room for: the stem's last cell is lifted mid-drag in `--accent-edge`, its empty slot dashed. Re-render the raster files with `bash scripts/icons/render-icons.sh` after changing either SVG.
 - **Gradients:** all amber and faint, and only these: the radial glow at the bottom left of Contact, a bottom-up wash in the hero (6%), the hatch, and the hero radar's own sweep and core. Add no others.
 - **Motion** (all in `globals.css`, all switched off under `prefers-reduced-motion`). Add no other animation without updating this list:
   1. `animate-rise`: hero children fade up 14px over 0.9s on `--ease-out-expo`, staggered 90ms by `[--i:n]` (kicker, name, summary, currently, buttons).
@@ -128,6 +129,7 @@ These come from the CV data conventions and from design review. They apply to bo
 
 - An interactive pivot/report-builder demo was tried and **removed**. It did not show anything meaningful to visitors.
 - A badge-style logo ("NBT" in a blue box) was **rejected** as cheap-looking. The wordmark is the name in serif italic.
+- Favicon concepts that a different name could reuse (a serif T, a `+` mark, a radar, "tw", a T with a dot or diamond) were **rejected** as not distinctive. The pivot-table T was chosen because it comes from the owner's own work: report builders and drag-and-drop dashboards.
 - The original pale-blue palette and diamond nodes were **replaced** by amber and `+` marks so the site does not read as a copy of zed.dev. Newsreader was kept: serif italic headings are a common style, not Zed's alone.
 - Light "paper" directions (editorial, Swiss, letter) were explored and **rejected** as too plain. The site stays dark.
 - The light-only rule from the original CV style guide is intentionally overridden for the website. The PDF CV keeps its own light style.
