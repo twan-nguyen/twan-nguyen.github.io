@@ -39,15 +39,6 @@ export function MailIcon(props: IconProps) {
   );
 }
 
-export function BriefcaseIcon(props: IconProps) {
-  return (
-    <Stroke {...props}>
-      <rect x="3" y="7" width="18" height="13" rx="1" />
-      <path d="M9 7V4h6v3M3 12.5h18" />
-    </Stroke>
-  );
-}
-
 export function CalendarIcon(props: IconProps) {
   return (
     <Stroke {...props}>

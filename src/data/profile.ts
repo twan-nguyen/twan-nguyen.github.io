@@ -1,6 +1,11 @@
 // All portfolio content lives here, in English and Vietnamese.
 // Each fact appears in exactly one section — see DESIGN.md, "Content rules".
 
+import type { StaticImageData } from "next/image";
+import stringeeLogo from "@/assets/stringee-logo.svg";
+import utcLogo from "@/assets/utc-logo.png";
+import vanXuanLogo from "@/assets/van-xuan-logo.png";
+
 export type Locale = "en" | "vi";
 
 export type WorkItem = {
@@ -8,6 +13,7 @@ export type WorkItem = {
   title: string;
   body: string;
   link?: { href: string; label: string };
+  image?: { src: StaticImageData; alt: string };
 };
 
 export type Role = {
@@ -33,10 +39,12 @@ export type Content = {
   /** Footer credit for the visual inspiration; the link text is always "zed.dev". */
   inspiredBy: string;
   work: WorkItem[];
-  company: { name: string; meta: string };
+  /** The logo stands in for the name on screen; the name stays as its alt text. */
+  company: { name: string; meta: string; logo: StaticImageData };
   roles: Role[];
   skills: { label: string; items: string; primary: boolean }[];
-  education: { period: string; school: string; degree: string };
+  /** The school emblem is decorative: the name is set as text beside it. */
+  education: { period: string; school: string; degree: string; logo: StaticImageData };
   languages: { label: string; items: string[] };
 };
 
@@ -87,9 +95,10 @@ export const content: Record<Locale, Content> = {
         title: "Van Xuan High School website",
         body: "The school's official site, built and deployed end to end with Next.js, React 19, TypeScript, Tailwind CSS and Cloudflare Workers. Staff publish content through Cogover, used as a headless CMS; the contact form is protected from spam by Cloudflare Turnstile.",
         link: vanXuanLink,
+        image: { src: vanXuanLogo, alt: "Van Xuan High School logo" },
       },
     ],
-    company: { name: "Stringee JSC", meta: "Hanoi · Apr 2023 — present" },
+    company: { name: "Stringee JSC", meta: "Hanoi · Apr 2023 — present", logo: stringeeLogo },
     roles: [
       {
         period: "Sep 2024 — present",
@@ -141,6 +150,7 @@ export const content: Record<Locale, Content> = {
       period: "2020 — 2024",
       school: "University of Transport and Communications",
       degree: "Engineer's Degree in Information Technology · GPA 3.27/4.0",
+      logo: utcLogo,
     },
     languages: { label: "languages", items: ["Vietnamese — native", "English — B1"] },
   },
@@ -178,9 +188,10 @@ export const content: Record<Locale, Content> = {
         title: "Website THPT Vạn Xuân – Hoài Đức",
         body: "Website chính thức của trường, tự phát triển và triển khai toàn bộ bằng Next.js, React 19, TypeScript, Tailwind CSS và Cloudflare Workers. Nhà trường tự đăng bài qua Cogover (headless CMS); form liên hệ được chống spam bằng Cloudflare Turnstile.",
         link: vanXuanLink,
+        image: { src: vanXuanLogo, alt: "Logo Trường THPT Vạn Xuân – Hoài Đức" },
       },
     ],
-    company: { name: "Stringee JSC", meta: "Hà Nội · 04/2023 — nay" },
+    company: { name: "Stringee JSC", meta: "Hà Nội · 04/2023 — nay", logo: stringeeLogo },
     roles: [
       {
         period: "09/2024 — nay",
@@ -232,6 +243,7 @@ export const content: Record<Locale, Content> = {
       period: "2020 — 2024",
       school: "Trường Đại học Giao thông Vận tải",
       degree: "Kỹ sư Công nghệ thông tin · Tốt nghiệp loại Giỏi · GPA 3.27/4.0",
+      logo: utcLogo,
     },
     languages: { label: "ngoại ngữ", items: ["Tiếng Việt — bản ngữ", "Tiếng Anh — B1"] },
   },

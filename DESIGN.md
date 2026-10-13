@@ -73,8 +73,9 @@ Contrast: `--faint` on `--panel` is about 6:1 and `--muted` about 8:1. Do not in
   - The footer is the only band without a closing hairline or nodes (`closed={false}`).
 - Section horizontal padding `clamp(16px, 5vw, 64px)`. Vertical padding inside a band `clamp(56px, 7vw, 88px)`.
 - Section order is fixed: **Header → Hero → Selected work → Experience → Skills → Education & languages → Contact → Footer.**
-- Ruled grids: either `grid lg:grid-cols-3` flush with the column, with cells `border-b last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0` so they never double the band's hairline, or `border-t border-l` on the wrapper with `border-r border-b` on each cell (inside padded sections). Columns collapse to one on phones.
-- Two-column rows (experience): `flex flex-wrap`, left `basis-[260px]`, right `grow-[2.4] basis-[460px]`. The divider is `border-b` on phones and `md:border-r` on wider screens.
+- Ruled grids (skills, education): `border-t border-l` on the wrapper with `border-r border-b` on each cell, inside padded sections. Columns collapse to one on phones.
+- Selected work is a **vertical list**, one item per row, flush with the column: a `border-t` on the list and `border-b last:border-b-0` on each row so it never doubles the band's hairline. Each row is a two-column row (below) with no divider: meta, title and the link (with any logo) on the left; the body on the right. A three-column card grid was **replaced** because one card with an image pushed the rows out of line and left the text cramped.
+- Two-column rows (experience, selected work): `flex flex-wrap`, left `basis-[260px]`, right `grow-[2.4] basis-[460px]`. In experience the divider is `border-b` on phones and `md:border-r` on wider screens.
 - Must work at 375px wide with no horizontal scroll. Touch targets are at least 44px.
 
 ## 5. Components
@@ -85,7 +86,7 @@ Contrast: `--faint` on `--panel` is about 6:1 and `--muted` about 8:1. Do not in
 - **Hero buttons on phones** (below `sm`): Email fills the first row, GitHub and LinkedIn share the second row equally. Never let one button wrap alone.
 - **Icons** live in `src/components/icons.tsx`: inline SVG in `currentColor`, `aria-hidden` (a visible label always sits beside them). Stroke icons are 24-unit, 1.6 stroke, round caps; brand marks (GitHub, LinkedIn) are filled Simple Icons paths (CC0). Where they appear, and nowhere else:
   - buttons: mail, GitHub, LinkedIn (16px);
-  - experience: a briefcase before the company name (17px, `--faint`) and a calendar before each role's dates (13px);
+  - experience: a calendar before each role's dates (13px);
   - education & languages: a graduation cap before the study years and a globe before the languages label (14px);
   - external links: the up-right arrow (13px).
   Do not put icons on skill labels, nav links or headings, and do not turn them into chips.
@@ -93,7 +94,12 @@ Contrast: `--faint` on `--panel` is about 6:1 and `--muted` about 8:1. Do not in
 - **Language switch:** a bordered pair `EN | VI`. The current locale is a non-link with `aria-current`. The other locale is a `Link` with `hrefLang` and `lang`.
 - **Bullets:** a mono `+`, coloured `--accent-edge` for the current role and `--dim` for past roles.
 - **External link:** mono text plus the 13px `ArrowUpRightIcon`. The arrow nudges up and right on hover.
-- **Work and skill cells** take `--panel-hover` on hover (300ms colour transition).
+- **Work rows and skill cells** take `--panel-hover` on hover (300ms colour transition).
+- **Images** live in `src/assets/` and render through `next/image` from static imports, so the build adds the base path. There are only three, all official marks taken from their owners' own sites:
+  - the **Van Xuan work row** shows the school's official logo (`van-xuan-logo.png`, the 160px transparent PNG from the school site's `/images/branding/`) at 32px inside the site link, just before the address, the way a favicon sits beside a URL. Use the school's own file; never redraw or recolour it;
+  - the **experience header** shows the official Stringee logo (`stringee-logo.svg`, the white version from stringee.com, unedited) at 28px high in place of the company name, which stays as its alt text. Use the brand's own file; never redraw or recolour it;
+  - the **education cell** shows the University of Transport and Communications emblem (`utc-logo.png`, the round seal embedded in utc.edu.vn's header `logo.svg`, exported at 160px) at 52px to the left of the study years, school and degree. Its alt text is empty because the school name is set as text beside it.
+  Cogover and StringeeX screenshots still need the company's permission and masked data (Content rule 3).
 - **Contact:** the email set large (`clamp(24px, 3.4vw, 40px)`) with an underline in `--accent-rule`, then secondary buttons.
 - **Hero background** (`HeroBackdrop` in `portfolio.tsx`): a radar, centred exactly on the hero, `aria-hidden`, no pointer events.
   - an **engineering grid** (`.hero-grid`): 12px cells in pale amber at 3.5%, with a stronger line (8%) every 60px. The grid box is 2400px (40 major cells), so a major line crosses exactly at the centre;

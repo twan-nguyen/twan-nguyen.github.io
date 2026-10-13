@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { contacts, content, localePaths, type Locale } from "@/data/profile";
 import {
   ArrowUpRightIcon,
-  BriefcaseIcon,
   CalendarIcon,
   GitHubIcon,
   GlobeIcon,
@@ -245,28 +245,34 @@ export function Portfolio({ locale }: { locale: Locale }) {
           <div className={`reveal pb-8 pt-[clamp(48px,6vw,72px)] ${sectionX}`}>
             <SerifHeading>{c.sections.work}</SerifHeading>
           </div>
-          <div className="grid border-t border-line lg:grid-cols-3">
+          <div className="border-t border-line">
             {c.work.map((item) => (
               <article
                 key={item.title}
-                className="border-b border-line transition-colors duration-300 last:border-b-0 hover:bg-panel-hover lg:border-b-0 lg:border-r lg:last:border-r-0"
+                className="border-b border-line transition-colors duration-300 last:border-b-0 hover:bg-panel-hover"
               >
-                <div className="reveal flex h-full flex-col gap-3.5 p-[clamp(20px,3vw,32px)]">
-                  <p className={`m-0 text-xs text-faint ${mono}`}>{item.meta}</p>
-                  <h3 className="m-0 text-xl font-semibold">{item.title}</h3>
-                  <p className="m-0 text-[15px] text-muted [text-wrap:pretty]">{item.body}</p>
-                  {item.link && (
-                    <a
-                      href={item.link.href}
-                      className={`group mt-auto inline-flex min-h-11 items-center gap-2 self-start text-[13px] text-link hover:text-link-hover ${mono}`}
-                    >
-                      {item.link.label}
-                      <ArrowUpRightIcon
-                        size={13}
-                        className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      />
-                    </a>
-                  )}
+                <div className={`reveal flex flex-wrap gap-x-10 gap-y-3 py-[clamp(24px,3vw,36px)] ${sectionX}`}>
+                  <div className="flex grow basis-[260px] flex-col gap-2">
+                    <p className={`m-0 text-xs text-faint ${mono}`}>{item.meta}</p>
+                    <h3 className="m-0 text-xl font-semibold">{item.title}</h3>
+                    {item.link && (
+                      <a
+                        href={item.link.href}
+                        className={`group inline-flex min-h-11 items-center gap-2 self-start text-[13px] text-link hover:text-link-hover ${mono}`}
+                      >
+                        {/* The site's own logo sits beside its address, like a favicon. */}
+                        {item.image && <Image src={item.image.src} alt={item.image.alt} className="mr-1 size-8" />}
+                        {item.link.label}
+                        <ArrowUpRightIcon
+                          size={13}
+                          className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        />
+                      </a>
+                    )}
+                  </div>
+                  <div className="grow-[2.4] basis-[460px]">
+                    <p className="m-0 text-[15px] text-muted [text-wrap:pretty]">{item.body}</p>
+                  </div>
                 </div>
               </article>
             ))}
@@ -277,9 +283,8 @@ export function Portfolio({ locale }: { locale: Locale }) {
           <SerifHeading className="reveal mb-9">{c.sections.experience}</SerifHeading>
           <div className="reveal border border-line">
             <div className="flex flex-wrap justify-between gap-x-6 gap-y-1 border-b border-line bg-panel-2 px-6 py-4">
-              <h3 className="m-0 flex items-center gap-2.5 text-[17px] font-semibold">
-                <BriefcaseIcon size={17} className="text-faint" />
-                {c.company.name}
+              <h3 className="m-0 flex items-center">
+                <Image src={c.company.logo} alt={c.company.name} className="h-7 w-auto" />
               </h3>
               <span className={`pt-[3px] text-xs text-faint ${mono}`}>{c.company.meta}</span>
             </div>
@@ -327,13 +332,16 @@ export function Portfolio({ locale }: { locale: Locale }) {
             {c.sections.education}
           </SerifHeading>
           <div className="reveal grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] border-l border-t border-line">
-            <div className="border-b border-r border-line px-[22px] py-5">
-              <p className={`m-0 mb-1.5 flex items-center gap-2 text-xs text-faint ${mono}`}>
-                <GraduationIcon size={14} />
-                {c.education.period}
-              </p>
-              <p className="m-0 font-semibold">{c.education.school}</p>
-              <p className="m-0 mt-1 text-[15px] text-muted">{c.education.degree}</p>
+            <div className="flex items-start gap-4 border-b border-r border-line px-[22px] py-5">
+              <Image src={c.education.logo} alt="" className="size-[52px] shrink-0" />
+              <div>
+                <p className={`m-0 mb-1.5 flex items-center gap-2 text-xs text-faint ${mono}`}>
+                  <GraduationIcon size={14} />
+                  {c.education.period}
+                </p>
+                <p className="m-0 font-semibold">{c.education.school}</p>
+                <p className="m-0 mt-1 text-[15px] text-muted">{c.education.degree}</p>
+              </div>
             </div>
             <div className="border-b border-r border-line px-[22px] py-5">
               <p className={`m-0 mb-1.5 flex items-center gap-2 text-xs text-faint ${mono}`}>
