@@ -59,7 +59,7 @@ export const content: Record<Locale, Content> = {
     kicker: "Frontend Developer · Hanoi, Vietnam",
     summary:
       "Frontend developer with 3+ years in B2B SaaS, the last two in React and TypeScript. I specialise in complex, configurable interfaces and data visualisation — report builders and drag-and-drop dashboards.",
-    currently: "Currently at Stringee JSC, on the Cogover low-code platform.",
+    currently: "Currently at Stringee JSC, working on Cogover, a low-code platform.",
     nav: { work: "Work", experience: "Experience", skills: "Skills", contact: "Contact" },
     sections: {
       work: "Selected work",
@@ -73,19 +73,19 @@ export const content: Record<Locale, Content> = {
     inspiredBy: "Design inspired by",
     work: [
       {
-        meta: "Cogover · 2024 — now · module owner",
+        meta: "Cogover · 2024 — present · module owner",
         title: "Report Builder & Dashboard",
-        body: "Lets users build reports across multiple data tables — with pivot tables, charts and custom formulas — and arrange them into drag-and-drop dashboards.",
+        body: "A self-serve report builder. Users combine data from multiple tables, analyse it with pivot tables, charts and custom formulas, and arrange the results into drag-and-drop dashboards.",
       },
       {
-        meta: "Cogover · 2024 — now · micro-frontends",
+        meta: "Cogover · 2024 — present · micro-frontends",
         title: "App shell & UI component library",
-        body: "The micro-frontend app shell — routing, permissions, real-time notifications over WebSocket — and the in-house component library (form builder, field components, rich text editor, dark mode), shipped as one npm package every app shares.",
+        body: "The shared shell that every Cogover app runs inside. Built on a micro-frontend architecture, it handles routing, permissions and real-time notifications over WebSocket. It ships together with an in-house component library (form builder, field components, rich text editor, dark mode) as a single npm package that every app shares.",
       },
       {
         meta: "Freelance · Jul — Aug 2026 · live",
         title: "Van Xuan High School website",
-        body: "The school's official site, built and deployed end to end with Next.js, React 19, TypeScript, Tailwind CSS and Cloudflare Workers. Staff publish through Cogover as a headless CMS; the contact form is protected by Cloudflare Turnstile.",
+        body: "The school's official site, built and deployed end to end with Next.js, React 19, TypeScript, Tailwind CSS and Cloudflare Workers. Staff publish content through Cogover, used as a headless CMS; the contact form is protected from spam by Cloudflare Turnstile.",
         link: vanXuanLink,
       },
     ],
@@ -96,24 +96,24 @@ export const content: Record<Locale, Content> = {
         title: "Frontend Developer, Cogover",
         about: "A low-code platform for building business management apps.",
         current: true,
-        intro: { before: "Report Builder, app shell and component library — see ", linkText: "Selected work", after: ". Also:" },
+        intro: { before: "Besides the Report Builder, app shell and component library (see ", linkText: "Selected work", after: "):" },
         highlights: [
-          "Features for Cogover's Next.js landing page, developer docs and marketplace.",
-          "Unit tests with Vitest; code held to SonarQube Quality Gates.",
-          "A platform knowledge base for AI coding agents (Claude Code, Codex).",
+          "Built features for Cogover's Next.js sites: the landing page, developer docs and marketplace.",
+          "Wrote unit tests with Vitest and kept code passing SonarQube Quality Gates.",
+          "Wrote a platform knowledge base that helps AI coding agents (Claude Code, Codex) work with Cogover.",
         ],
       },
       {
         period: "Apr 2023 — Aug 2024",
         title: "Full-stack Developer, StringeeX",
-        about: "An omnichannel contact center and CRM: calls, chat, email, tickets.",
+        about: "An omnichannel contact centre and CRM: calls, chat, email, tickets.",
         current: false,
         highlights: [
-          "Vue.js features: call reports, ticketing, email channel, per-customer portal configuration, payment integration.",
-          "PHP REST APIs for the call center: automated call campaigns, hotline management, webhooks.",
+          "Built Vue.js features: call reports, ticketing, the email channel, per-customer portal settings and payment integration.",
+          "Built PHP REST APIs for the call centre: automated call campaigns, hotline management and webhooks.",
           "Migrated the reporting service's data source from Solr to Elasticsearch.",
-          "Developer portal: phone numbers, devices, account permissions.",
-          "Unit tests with Jest and PHPUnit.",
+          "Added developer portal features for managing phone numbers, devices and account permissions.",
+          "Wrote unit tests with Jest and PHPUnit.",
         ],
       },
     ],
@@ -170,8 +170,8 @@ export const content: Record<Locale, Content> = {
       },
       {
         meta: "Cogover · 2024 — nay · micro-frontend",
-        title: "App shell & thư viện UI component",
-        body: "App shell theo kiến trúc micro-frontend — routing, phân quyền, thông báo realtime qua WebSocket — cùng thư viện UI component nội bộ (form builder, các loại field, rich text editor, dark mode), đóng gói thành npm package dùng chung cho mọi ứng dụng.",
+        title: "Khung ứng dụng & thư viện UI component",
+        body: "Phần khung chung mà mọi ứng dụng Cogover chạy bên trong, xây theo kiến trúc micro-frontend, đảm nhận routing, phân quyền và thông báo realtime qua WebSocket. Đi kèm là thư viện UI component nội bộ gồm form builder, các loại field, rich text editor và dark mode. Cả hai được đóng gói chung thành một npm package mà mọi ứng dụng đều dùng.",
       },
       {
         meta: "Freelance · 07 — 08/2026 · đang hoạt động",
@@ -187,7 +187,7 @@ export const content: Record<Locale, Content> = {
         title: "Frontend Developer, sản phẩm Cogover",
         about: "Nền tảng low-code để doanh nghiệp tự xây dựng ứng dụng quản trị.",
         current: true,
-        intro: { before: "Report Builder, app shell và thư viện component — xem ", linkText: "Dự án tiêu biểu", after: ". Ngoài ra:" },
+        intro: { before: "Report Builder, khung ứng dụng và thư viện component — xem ", linkText: "Dự án tiêu biểu", after: ". Ngoài ra:" },
         highlights: [
           "Xây dựng tính năng cho các website Next.js của Cogover: landing page, trang tài liệu cho developer và marketplace.",
           "Viết unit test bằng Vitest, giữ code đạt chuẩn SonarQube Quality Gate.",
